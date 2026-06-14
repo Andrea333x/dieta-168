@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Dieta 16:8</title>
+  <meta name="description" content="Piano nutrizionale 16:8 di coppia — pasti, meal prep, spesa e biohacking.">
+  <meta name="theme-color" content="#0c0f14">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Dieta">
+  <!-- use-credentials: necessario quando l'app è dietro un login (cookie) -->
+  <link rel="manifest" href="manifest.webmanifest" crossorigin="use-credentials">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+  <header class="app-header">
+    <div class="hrow">
+      <h1 class="app-title">Dieta <span class="t-accent">16:8</span></h1>
+      <div class="hactions">
+        <div class="seg" role="group" aria-label="Persona attiva">
+          <button type="button" data-p="lui" aria-pressed="false" aria-label="Mostra porzioni di lui">👦</button>
+          <button type="button" data-p="entrambi" aria-pressed="false" aria-label="Mostra porzioni di entrambi">👫</button>
+          <button type="button" data-p="lei" aria-pressed="false" aria-label="Mostra porzioni di lei">👩</button>
+        </div>
+        <button type="button" class="icon-btn" id="btn-theme" aria-label="Cambia tema chiaro o scuro">🌗</button>
+        <button type="button" class="icon-btn" id="btn-menu" aria-label="Altro: meal prep, spesa e impostazioni">⚙️</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="app">
+    <section id="tab-oggi" class="tab-pane active" aria-label="Oggi"></section>
+    <section id="tab-settimana" class="tab-pane" aria-label="Settimana"></section>
+    <section id="tab-ricette" class="tab-pane" aria-label="Ricette"></section>
+    <section id="tab-tips" class="tab-pane" aria-label="Tips e regole"></section>
+    <section id="tab-prep" class="tab-pane" aria-label="Meal prep"></section>
+    <section id="tab-spesa" class="tab-pane" aria-label="Lista della spesa"></section>
+    <section id="tab-diario" class="tab-pane" aria-label="Diario personale"></section>
+    <section id="tab-ai" class="tab-pane" aria-label="Assistente AI"></section>
+    <footer id="app-footer" class="app-footer"></footer>
+  </main>
+
+  <nav class="tabbar" aria-label="Navigazione principale">
+    <button type="button" data-tab="oggi" aria-label="Oggi"><span class="ico">📅</span><span class="lbl">Oggi</span></button>
+    <button type="button" data-tab="settimana" aria-label="Settimana"><span class="ico">🗓️</span><span class="lbl">Settimana</span></button>
+    <button type="button" data-tab="ricette" aria-label="Ricette"><span class="ico">🍽️</span><span class="lbl">Ricette</span></button>
+    <button type="button" data-tab="tips" aria-label="Tips"><span class="ico">💡</span><span class="lbl">Tips</span></button>
+    <button type="button" data-tab="diario" aria-label="Diario"><span class="ico">📔</span><span class="lbl">Diario</span></button>
+    <button type="button" data-tab="ai" aria-label="Assistente AI"><span class="ico">🤖</span><span class="lbl">AI</span></button>
+  </nav>
+
+  <div id="sheet-backdrop" hidden></div>
+  <div id="sheet" role="dialog" aria-modal="true" aria-label="Dettaglio" hidden>
+    <div class="sheet-grab" aria-hidden="true"></div>
+    <button type="button" class="sheet-close" data-action="close-sheet" aria-label="Chiudi">✕</button>
+    <div id="sheet-body"></div>
+  </div>
+
+  <input type="file" id="import-file" accept="application/json,.json" hidden aria-hidden="true">
+
+  <script src="js/data/diet.js"></script>
+  <script src="js/data/recipes.js"></script>
+  <script src="js/data/tips.js"></script>
+  <script src="js/assistant.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

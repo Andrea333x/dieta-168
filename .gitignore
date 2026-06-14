@@ -1,0 +1,46 @@
+# ============================================================
+# .gitignore — Dieta AI (repo PRIVATA, dati sanitari)
+# REGOLA FISSA: questi file NON devono finire su GitHub.
+# Messo PRIMA del primo commit: ciò che entra nella history git
+# ci resta per sempre, quindi le esclusioni vanno applicate subito.
+# NB: i file runtime (js/data/diet.js, js/assistant.js, app.js, …)
+# contengono inevitabilmente i riferimenti clinici e DEVONO restare
+# nel repo per far funzionare l'app → protezione reale = repo privata
+# + Cloudflare Access. Vedi docs/deploy.md.
+# ============================================================
+
+# --- Documenti sorgente con dettaglio clinico completo (non servono a runtime) ---
+Dieta Intermittente*.md
+Meal Prep Edition*.md
+docs/research.md
+
+# --- Backup personali esportati dall'app (umore, peso, ciclo, note...) ---
+dieta-backup-*.json
+*-backup-*.json
+backup*.json
+
+# --- Segreti / config di deploy ---
+.env
+.env.*
+.vercel/
+*.key
+*.pem
+secrets*.json
+
+# --- Config e stato locale degli strumenti (non vanno condivisi) ---
+.claude/
+.playwright-mcp/
+
+# --- Sistema operativo / editor ---
+.DS_Store
+Thumbs.db
+desktop.ini
+*~
+*.tmp
+*.log
+.vscode/
+.idea/
+
+# --- Node (nel caso si aggiunga tooling in futuro) ---
+node_modules/
+npm-debug.log*
