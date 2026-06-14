@@ -95,3 +95,9 @@ README.md · CHANGELOG.md · ROADMAP.md
 - Ogni novità → aggiornare CHANGELOG.md e, se cambia direzione, ROADMAP.md
 - I file sorgente .md della dieta sono READ-ONLY
 - L'app non dà consigli medici sostitutivi: disclaimer sempre presente
+
+## Git & privacy (REGOLA FISSA per gli update)
+- Il progetto è un **repo git** (`main`, dal 2026-06-15). La repo su GitHub deve essere **SEMPRE privata** (dati sanitari). Mai GitHub Pages (vedi `docs/deploy.md`).
+- `.gitignore` esclude i dati sensibili **non necessari a runtime**: i 2 `.md` sorgente della dieta, `docs/research.md`, i backup esportati (`dieta-backup-*.json`), segreti (`.env`, chiavi), e config locale (`.claude/`, `.playwright-mcp/`). Questi NON devono MAI entrare nella history git.
+- **Limite onesto da ricordare**: i file runtime (`js/data/diet.js`, `js/assistant.js`, `app.js`, `tips.js`, `recipes.js`) contengono inevitabilmente i riferimenti clinici e DEVONO stare nel repo perché l'app funzioni. Quindi la patologia NON è del tutto eliminabile dal repo: la protezione reale è **repo privata + Cloudflare Access** (email-gated), non il `.gitignore`.
+- **Prima di ogni push**: verificare con `git ls-files` che nessun file sensibile non-runtime sia tracciato (i sorgente .md / research.md / backup devono restare fuori). Workflow update consigliato: repo privata collegata a Cloudflare Pages → ogni release è un `git push` (ricordare il bump `CACHE` in sw.js a monte).
