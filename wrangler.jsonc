@@ -9,7 +9,9 @@
   "name": "dieta-168",
   "main": "worker.js",
   "compatibility_date": "2026-06-01",
-  "workers_dev": true,
+  // workers_dev:false → spento l'URL *.workers.dev: l'app vive solo sul dominio
+  // custom (dieta333ai.uk) dietro Access. Evita che un deploy riapra un URL pubblico.
+  "workers_dev": false,
   "preview_urls": false,
   "assets": {
     "directory": ".",
