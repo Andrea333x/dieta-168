@@ -6,6 +6,10 @@
   // Cloudflare Access, separatamente. Vedi docs/deploy.md.
   "name": "dieta-168",
   "compatibility_date": "2026-06-01",
+  // workers_dev: l'URL principale resta attivo (lo proteggi con Cloudflare Access).
+  // preview_urls: false → niente URL di anteprima pubblici per ogni versione (dati sanitari).
+  "workers_dev": true,
+  "preview_urls": false,
   "assets": {
     "directory": "."
   }
