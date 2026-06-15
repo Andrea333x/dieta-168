@@ -59,7 +59,15 @@ README.md · CHANGELOG.md · ROADMAP.md
 - `TIPS = [{id,categoria,icona,titolo,testo,persona}]`
 - **Chiavi localStorage** (prefisso `dieta_`, tutte nell'export TRANNE `ai_key`): `persona, theme, start, track_<data>, spesa, prep, fav, mood_<data>, water_<data>, weight, times_<data>, cycle, notes, ai_key, ai_model, ai_chat`
 
-## Stato: v1.2.0 consegnata (2026-06-14)
+## Stato: v1.3.0 consegnata (2026-06-15)
+- **Assistente AI migrato da Claude a coach NVIDIA**, con 2 modelli switchabili: **Kimi K2.6** (`moonshotai/kimi-k2.6`, default) e **GLM-5.1** (`z-ai/glm-5.1`). Claude rimosso del tutto.
+- **NVIDIA non supporta CORS dal browser** → introdotto un **proxy nel Worker**: `worker.js` serve gli asset E gestisce `POST /api/coach` inoltrando a `https://integrate.api.nvidia.com/v1/chat/completions` con la key da `env.NVIDIA_API_KEY` (whitelist modelli). Il browser chiama `/api/coach` sullo stesso dominio (niente CORS), tutto dietro Cloudflare Access.
+- **La API key NON è più sul dispositivo**: è il **secret del Worker `NVIDIA_API_KEY`** (dashboard Worker → Settings → Variables and Secrets, o `npx wrangler secret put NVIDIA_API_KEY`). Rimossi `dieta_ai_key` e il campo "inserisci key". ⚙️ ora cambia solo il modello (`dieta_ai_model`, valori = i 2 id NVIDIA). Cronologia in `dieta_ai_chat` (solo locale).
+- `wrangler.jsonc`: `main: "worker.js"` + binding asset `ASSETS`. Nuovo `.assetsignore` esclude dai file *serviti* worker.js/config/**tutti i .md** (documenti clinici non scaricabili). CACHE `dieta-v6`.
+- Formato richieste = **OpenAI chat-completions** (`messages` con system+storico, `max_tokens:1024`, `temperature:0.3`, `stream:false`). assistant.js mantiene contratto `window.AssistantTab.mount`, system prompt con tutta la dieta, sanitizzazione markdown, aria-live.
+- Collaudo browser OK (selettore Kimi/GLM, no campo key, errore amichevole su /api/coach). In locale /api/coach dà 501 (server statico non esegue il Worker) → atteso, in prod risponde il Worker.
+
+### Stato precedente: v1.2.0 consegnata (2026-06-14)
 - **FASE 5 (debiti tecnici) chiusa.** Toggle **in-place** in Oggi/Spesa (niente più re-render integrale: helper `updateOggiProgress()` e `updateSpesaProgress()`; in renderOggi l'anello è in `#oggi-ring` e il recap in `#oggi-recap`; in renderSpesa contatore `#spesa-count`, barra `#spesa-bar`, pillole categoria `.cat-count[data-cat]`). Caso noto: con `spesaHide` attivo la Spesa fa render completo (l'item spuntato deve sparire).
 - **Toast** `toast(msg,kind)` (`#toast`, `role=status`/`aria-live`) usato da `setState` per avvisare su **quota localStorage** esaurita (niente più perdita dati silenziosa). **Banner aggiornamento** (`#update-banner`, `data-action="reload-app"`) su `controllerchange` solo se c'era già un controller (no prima install, no reload-loop).
 - **A11y**: `aria-hidden` sul `%` dell'anello, `aria-pressed` sui 3 `[data-p]` (aggiornato in `syncPersonaUI`), `aria-live="polite"` sul contenitore messaggi AI (`ai-msgs` in assistant.js).

@@ -105,6 +105,22 @@ Poi apri `http://localhost:8080` nel browser. Se dice "porta occupata", usa un a
 
 ---
 
+## 🤖 Coach AI — chiave NVIDIA (secret del Worker)
+
+Da v1.3.0 il coach usa i modelli **Kimi K2.6 / GLM-5.1** via NVIDIA build, attraverso un proxy nel
+Worker (`worker.js`, rotta `/api/coach`). La chiave **non** va nel codice né sul telefono: è un
+**secret del Worker**.
+
+1. Prendi una API key su **build.nvidia.com** (formato `nvapi-…`). Consiglio: impostaci un limite di spesa.
+2. Imposta il secret (una volta sola), in uno dei due modi:
+   - **Dashboard**: Cloudflare → il tuo Worker `dieta-168` → **Settings → Variables and Secrets → Add → Secret** → Name `NVIDIA_API_KEY`, Value `nvapi-…` → Save.
+   - **Terminale**: dalla cartella del progetto → `npx wrangler secret put NVIDIA_API_KEY` → incolla la chiave.
+3. Il coach funziona subito (il proxy legge `env.NVIDIA_API_KEY`). Se manca, l'app mostra
+   "⚠️ Coach non ancora configurato (manca NVIDIA_API_KEY nel Worker)".
+
+Il proxy è **dietro Cloudflare Access**: solo gli utenti autorizzati possono usarlo, quindi la chiave
+non è sfruttabile da estranei. La key non compare mai nel repo, nei backup o nel browser.
+
 ## Promemoria sicurezza
 - La **API key Anthropic** resta nel localStorage del dispositivo e non è mai nei backup esportati né nei file deployati.
 - A ogni modifica dei file dell'app prima di un nuovo deploy: **bump di `CACHE` in `sw.js`** (vedi README).

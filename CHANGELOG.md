@@ -2,6 +2,25 @@
 
 ## [Unreleased]
 
+## [1.3.0] — 2026-06-15
+### Cambiato (assistente AI: da Claude a coach NVIDIA, con proxy)
+- L'assistente non usa più Anthropic/Claude. Ora è un **coach via NVIDIA build**, con **due modelli selezionabili**: **Kimi K2.6** (`moonshotai/kimi-k2.6`, default) e **GLM-5.1** (`z-ai/glm-5.1`).
+- **Nuova architettura — proxy nel Worker**: NVIDIA non supporta le chiamate dirette dal browser (niente CORS), quindi il Worker Cloudflare ora espone una rotta interna **`/api/coach`** (`worker.js`) che inoltra a `https://integrate.api.nvidia.com/v1/chat/completions`. Il browser chiama la rotta sullo stesso dominio → nessun problema CORS; tutto resta **dietro Cloudflare Access** (solo gli utenti autorizzati possono usare il coach).
+- **La API key non è più sul dispositivo**: vive come **secret del Worker** `NVIDIA_API_KEY` (mai nel codice, nel repo o nel browser). Rimosso del tutto il campo "inserisci API key" e la chiave `dieta_ai_key`. Il pulsante ⚙️ ora serve solo a **cambiare modello** (`dieta_ai_model`). La cronologia (`dieta_ai_chat`) resta solo in locale.
+- Whitelist modelli lato Worker (rifiuta richieste con modelli non previsti). Sanitizzazione markdown anti-XSS e `aria-live` sulle risposte invariati.
+
+### Aggiunto
+- `worker.js` — Worker che serve il sito **e** fa da proxy `/api/coach` (key da `env.NVIDIA_API_KEY`).
+- `.assetsignore` — esclude dai file *serviti* worker.js, config e **tutti i `.md`** (così i documenti con dettagli clinici non sono scaricabili nemmeno dietro Access).
+
+### Modificato
+- `wrangler.jsonc`: aggiunto `main: "worker.js"` e binding asset `ASSETS`.
+- Service worker: cache `dieta-v6`.
+
+### Note privacy
+- Le domande al coach (che includono il piano e i vincoli clinici) passano dal vostro Worker e da lì al modello scelto su NVIDIA: come prima con Claude, un LLM in cloud vede il prompt — cambia solo il fornitore. La key sta nel vostro account Cloudflare (privato, dietro Access), non più sul telefono.
+- Collaudo browser: tab AI con nuovo selettore (Kimi/GLM), nessun campo key, invio con errore amichevole (in locale `/api/coach` dà 501 perché il server statico non esegue il Worker — in produzione il Worker risponde). Zero crash.
+
 ## [1.2.0] — 2026-06-14
 ### Aggiunto
 - **Banner "Aggiornamento pronto · Ricarica"** (FASE 5.3): dopo un nuovo deploy, se l'app era già installata, compare un banner in cima con un pulsante per ricaricare e prendere subito la versione nuova (niente reload automatico, mostrato una sola volta). Sfrutta `controllerchange` del service worker (che già fa `skipWaiting`+`clients.claim`).

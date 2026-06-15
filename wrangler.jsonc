@@ -1,16 +1,18 @@
 {
-  // Config per pubblicare la PWA come sito STATICO su Cloudflare Workers.
-  // Nessun codice server: serve solo i file della cartella come asset.
-  // Deploy command da impostare su Cloudflare: "npx wrangler deploy"
-  // (build command: lasciare vuoto). La protezione login si fa con
-  // Cloudflare Access, separatamente. Vedi docs/deploy.md.
+  // Worker che (1) serve la PWA come sito statico e (2) fa da proxy per il
+  // coach AI verso NVIDIA build (la key sta nel secret NVIDIA_API_KEY, mai nel
+  // codice/repo/browser). Il browser chiama /api/coach sullo STESSO dominio →
+  // niente CORS. Tutto è dietro Cloudflare Access. Vedi docs/deploy.md.
+  // Deploy command su Cloudflare: "npx wrangler deploy" (build command vuoto).
+  // Secret da impostare: NVIDIA_API_KEY (dashboard Worker → Settings → Variables
+  // and Secrets, oppure: npx wrangler secret put NVIDIA_API_KEY).
   "name": "dieta-168",
+  "main": "worker.js",
   "compatibility_date": "2026-06-01",
-  // workers_dev: l'URL principale resta attivo (lo proteggi con Cloudflare Access).
-  // preview_urls: false → niente URL di anteprima pubblici per ogni versione (dati sanitari).
   "workers_dev": true,
   "preview_urls": false,
   "assets": {
-    "directory": "."
+    "directory": ".",
+    "binding": "ASSETS"
   }
 }

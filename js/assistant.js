@@ -1,6 +1,8 @@
 // ============================================================
 // ASSISTANT — Tab "Assistente AI" della PWA Dieta 16:8 di coppia
-// Chat con l'API Anthropic (raw fetch, direct browser access).
+// Chat con il coach via NVIDIA build, attraverso il proxy del Worker
+// (POST /api/coach, stesso dominio → niente CORS). La key vive SOLO
+// nel Worker (env.NVIDIA_API_KEY), mai nel client.
 // Vanilla JS, nessuna dipendenza. Espone solo window.AssistantTab.
 // Dati letti (in modo difensivo) da:
 //   window.DIET_DATA · window.RECIPES · window.TIPS
@@ -10,22 +12,20 @@
   'use strict';
 
   // ---------- Costanti ----------
-  var LS_KEY = 'dieta_ai_key';
   var LS_MODEL = 'dieta_ai_model';
   var LS_CHAT = 'dieta_ai_chat';
 
-  var API_URL = 'https://api.anthropic.com/v1/messages';
-  var API_VERSION = '2023-06-01';
-  var MAX_TOKENS = 2048;
+  var API_URL = '/api/coach';   // proxy nel Worker, stesso dominio
+  var MAX_TOKENS = 1024;
+  var TEMPERATURE = 0.3;
   var HISTORY_SENT = 12;   // ultimi N messaggi inviati all'API
   var HISTORY_SAVED = 30;  // ultimi N messaggi persistiti in localStorage
 
   var MODELS = [
-    { id: 'claude-opus-4-8', label: 'Opus 4.8 — massima qualità (default)' },
-    { id: 'claude-sonnet-4-6', label: 'Sonnet 4.6 — bilanciato' },
-    { id: 'claude-haiku-4-5', label: 'Haiku 4.5 — veloce/economico' }
+    { id: 'moonshotai/kimi-k2.6', label: 'Kimi K2.6 (default)' },
+    { id: 'z-ai/glm-5.1', label: 'GLM-5.1' }
   ];
-  var DEFAULT_MODEL = 'claude-opus-4-8';
+  var DEFAULT_MODEL = 'moonshotai/kimi-k2.6';
 
   var CHIPS = [
     'Cosa mangio oggi?',
@@ -61,14 +61,16 @@
     return n;
   }
 
-  function getKey() { try { return localStorage.getItem(LS_KEY) || ''; } catch (e) { return ''; } }
-  function setKey(v) { try { localStorage.setItem(LS_KEY, v); } catch (e) {} }
   function getModel() {
     var m = '';
     try { m = localStorage.getItem(LS_MODEL) || ''; } catch (e) {}
     return MODELS.some(function (x) { return x.id === m; }) ? m : DEFAULT_MODEL;
   }
-  function setModel(v) { try { localStorage.setItem(LS_MODEL, v); } catch (e) {} }
+  function setModel(v) {
+    // valida contro la whitelist, fallback al default
+    if (!MODELS.some(function (x) { return x.id === v; })) v = DEFAULT_MODEL;
+    try { localStorage.setItem(LS_MODEL, v); } catch (e) {}
+  }
 
   function loadChat() {
     try {
@@ -248,7 +250,7 @@
     return cachedSystemPrompt;
   }
 
-  // Contesto dinamico: blocco SEPARATO, senza cache_control (niente timestamp nel blocco cacheato)
+  // Contesto dinamico: blocco SEPARATO, appeso al system prompt a ogni invio.
   function buildRuntimeContext() {
     var giorni = ['domenica', 'lunedì', 'martedì', 'mercoledì', 'giovedì', 'venerdì', 'sabato'];
     var mesi = ['gennaio', 'febbraio', 'marzo', 'aprile', 'maggio', 'giugno', 'luglio', 'agosto', 'settembre', 'ottobre', 'novembre', 'dicembre'];
@@ -259,7 +261,7 @@
   }
 
   // ---------- Storia per l'API: ultimi 12, ruoli alternati, primo = user ----------
-  function buildApiMessages() {
+  function buildHistory() {
     var filtered = messages.filter(function (m) { return m.role === 'user' || m.role === 'assistant'; });
     var alt = [];
     filtered.forEach(function (m) {
@@ -275,50 +277,48 @@
     return hist;
   }
 
-  // ---------- Chiamata API ----------
+  // Costruisce l'array OpenAI completo: system + runtime + storico alternato.
+  function buildApiMessages() {
+    var out = [
+      { role: 'system', content: buildSystemPrompt() + '\n\n' + buildRuntimeContext() }
+    ];
+    buildHistory().forEach(function (m) { out.push(m); });
+    return out;
+  }
+
+  // ---------- Chiamata API (proxy Worker, formato OpenAI) ----------
   function callApi() {
     var body = {
       model: getModel(),
+      messages: buildApiMessages(),
       max_tokens: MAX_TOKENS,
-      system: [
-        { type: 'text', text: buildSystemPrompt(), cache_control: { type: 'ephemeral' } },
-        { type: 'text', text: buildRuntimeContext() }
-      ],
-      messages: buildApiMessages()
+      temperature: TEMPERATURE
     };
 
     return fetch(API_URL, {
       method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        'x-api-key': getKey(),
-        'anthropic-version': API_VERSION,
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body)
     }).then(function (res) {
       return res.json().catch(function () { return {}; }).then(function (data) {
-        if (!res.ok) {
-          var type = data && data.error && data.error.type;
-          var msg;
-          if (res.status === 401) msg = 'Chiave API non valida. Tocca l\'ingranaggio in alto e controlla la chiave.';
-          else if (res.status === 429) msg = 'Limite di richieste raggiunto. Riprova tra poco.';
-          else if (res.status === 529 || type === 'overloaded_error') msg = 'Servizio Anthropic sovraccarico in questo momento. Riprova tra qualche minuto.';
-          else if (res.status === 400) msg = 'Richiesta non valida (' + ((data.error && data.error.message) || 'errore 400') + ').';
-          else msg = 'Errore dal servizio (' + res.status + '). ' + ((data.error && data.error.message) || 'Riprova.');
-          throw new Error(msg);
+        // Errore esplicito dal Worker / upstream
+        var errMsg = data && data.error;
+        if (errMsg || !res.ok) {
+          var raw = typeof errMsg === 'string' ? errMsg : (errMsg && errMsg.message) || ('Errore ' + res.status);
+          // Key non configurata nel Worker → messaggio dedicato
+          if (/NVIDIA_API_KEY|non configurata|non ancora configurat/i.test(raw)) {
+            throw new Error('Coach non ancora configurato (manca NVIDIA_API_KEY nel Worker).');
+          }
+          throw new Error('Coach non disponibile: ' + raw);
         }
-        if (data && data.stop_reason === 'refusal') {
-          return 'Mi spiace, non posso aiutarti con questa richiesta. Se è una questione medica, la persona giusta è il vostro medico. Posso però aiutarti con il piano, le ricette o gli integratori.';
-        }
-        var text = '';
-        (Array.isArray(data.content) ? data.content : []).forEach(function (b) {
-          if (b && b.type === 'text' && typeof b.text === 'string') text += b.text;
-        });
-        return text || 'Risposta vuota dal modello. Riprova.';
+        var choice = data && Array.isArray(data.choices) && data.choices[0];
+        var text = choice && choice.message && typeof choice.message.content === 'string'
+          ? choice.message.content
+          : '';
+        return text.trim() || 'Risposta vuota dal modello. Riprova.';
       });
     }, function () {
-      throw new Error('Connessione assente o bloccata. Controlla la rete e riprova.');
+      throw new Error('Coach non disponibile: connessione assente o bloccata. Controlla la rete e riprova.');
     });
   }
 
@@ -368,15 +368,11 @@
       '.ai-setup-desc{color:var(--text-dim);font-size:14px;line-height:1.5;margin:0;text-align:center;}' +
       '.ai-field{display:flex;flex-direction:column;gap:6px;}' +
       '.ai-label{font-size:13px;font-weight:600;color:var(--text-dim);}' +
-      '.ai-keyrow{display:flex;gap:8px;}' +
-      '.ai-keyinput{flex:1;min-height:44px;padding:10px 12px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:15px;font-family:var(--font);outline:none;}' +
-      '.ai-keyinput:focus{border-color:var(--accent);}' +
       '.ai-select{min-height:44px;padding:10px 12px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:15px;font-family:var(--font);}' +
       '.ai-btn{min-height:46px;border-radius:var(--radius);border:none;background:var(--accent);color:var(--accent-ink);font-size:16px;font-weight:600;cursor:pointer;font-family:var(--font);}' +
       '.ai-btn:disabled{opacity:.45;}' +
       '.ai-btn-ghost{background:var(--surface);color:var(--text);border:1px solid var(--border);}' +
       '.ai-privacy{font-size:12.5px;color:var(--text-dim);line-height:1.5;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;margin:0;}' +
-      '.ai-link{color:var(--accent);text-decoration:none;font-size:14px;text-align:center;display:block;padding:10px;}' +
       // Vuoto
       '.ai-empty{text-align:center;color:var(--text-dim);font-size:14px;padding:26px 20px 8px;line-height:1.5;}' +
       '.ai-empty b{color:var(--text);}';
@@ -386,39 +382,17 @@
     document.head.appendChild(style);
   }
 
-  // ---------- UI: setup / impostazioni ----------
-  function renderSetup(isSettings) {
+  // ---------- UI: impostazioni (solo scelta modello) ----------
+  function renderSettings() {
     bodyEl.textContent = '';
     var wrap = el('div', 'ai-setup');
 
     wrap.appendChild(el('div', 'ai-setup-emoji', '🤖'));
-    wrap.appendChild(el('h2', null, isSettings ? 'Impostazioni assistente' : 'Il tuo assistente nutrizionale'));
+    wrap.appendChild(el('h2', null, 'Impostazioni assistente'));
 
     var desc = el('p', 'ai-setup-desc');
-    desc.textContent = 'Conosce a memoria il vostro piano 16:8, i divieti di entrambi, le ricette e gli integratori. Chiedigli cosa mangiare oggi, alternative ai pasti o consigli pratici. Per funzionare serve una chiave API Anthropic.';
+    desc.textContent = 'Scegli il modello che il coach userà per rispondere. Conosce a memoria il vostro piano 16:8, i divieti di entrambi, le ricette e gli integratori.';
     wrap.appendChild(desc);
-
-    // Campo chiave
-    var fieldKey = el('div', 'ai-field');
-    fieldKey.appendChild(el('label', 'ai-label', 'Chiave API Anthropic'));
-    var row = el('div', 'ai-keyrow');
-    var keyInput = document.createElement('input');
-    keyInput.type = 'password';
-    keyInput.className = 'ai-keyinput';
-    keyInput.placeholder = 'sk-ant-…';
-    keyInput.autocomplete = 'off';
-    keyInput.spellcheck = false;
-    keyInput.value = getKey();
-    var eye = el('button', 'ai-iconbtn', '👁');
-    eye.type = 'button';
-    eye.setAttribute('aria-label', 'Mostra/nascondi chiave');
-    eye.addEventListener('click', function () {
-      keyInput.type = keyInput.type === 'password' ? 'text' : 'password';
-    });
-    row.appendChild(keyInput);
-    row.appendChild(eye);
-    fieldKey.appendChild(row);
-    wrap.appendChild(fieldKey);
 
     // Selettore modello
     var fieldModel = el('div', 'ai-field');
@@ -436,37 +410,22 @@
     wrap.appendChild(fieldModel);
 
     // Salva
-    var save = el('button', 'ai-btn', isSettings ? 'Salva impostazioni' : 'Inizia a chattare');
+    var save = el('button', 'ai-btn', 'Salva impostazioni');
     save.type = 'button';
     save.addEventListener('click', function () {
-      var k = keyInput.value.trim();
-      if (!k) { keyInput.focus(); return; }
-      setKey(k);
       setModel(select.value);
       renderChat();
     });
     wrap.appendChild(save);
 
-    if (isSettings) {
-      var back = el('button', 'ai-btn ai-btn-ghost', 'Annulla');
-      back.type = 'button';
-      back.addEventListener('click', function () {
-        if (getKey()) renderChat(); else renderSetup(false);
-      });
-      wrap.appendChild(back);
-    }
+    var back = el('button', 'ai-btn ai-btn-ghost', 'Annulla');
+    back.type = 'button';
+    back.addEventListener('click', function () { renderChat(); });
+    wrap.appendChild(back);
 
     var privacy = el('p', 'ai-privacy');
-    privacy.textContent = '🔒 Privacy: la chiave resta solo su questo dispositivo (localStorage) e le domande vengono inviate direttamente ad Anthropic. Nessun altro server di mezzo.';
+    privacy.textContent = '🔒 Privacy: le domande passano dal vostro Worker su Cloudflare e da lì al modello selezionato. Nessuna chiave è salvata su questo dispositivo. La cronologia resta solo qui (localStorage).';
     wrap.appendChild(privacy);
-
-    var link = document.createElement('a');
-    link.className = 'ai-link';
-    link.href = 'https://console.anthropic.com/';
-    link.target = '_blank';
-    link.rel = 'noopener noreferrer';
-    link.textContent = 'Ottieni una chiave su console.anthropic.com →';
-    wrap.appendChild(link);
 
     bodyEl.appendChild(wrap);
   }
@@ -579,7 +538,6 @@
   function sendMessage(text) {
     text = String(text || '').trim();
     if (!text || pending) return;
-    if (!getKey()) { renderSetup(false); return; }
 
     pending = true;
     sendBtn.disabled = true;
@@ -608,7 +566,7 @@
     if (pending) return;
     messages = [];
     try { localStorage.removeItem(LS_CHAT); } catch (e) {}
-    if (getKey()) renderChat(); else renderSetup(false);
+    renderChat();
   }
 
   // ---------- Mount ----------
@@ -636,9 +594,9 @@
 
     var gearBtn = el('button', 'ai-iconbtn', '⚙️');
     gearBtn.type = 'button';
-    gearBtn.title = 'Cambia chiave / modello';
-    gearBtn.setAttribute('aria-label', 'Impostazioni: cambia chiave e modello');
-    gearBtn.addEventListener('click', function () { renderSetup(true); });
+    gearBtn.title = 'Cambia modello';
+    gearBtn.setAttribute('aria-label', 'Impostazioni: cambia modello');
+    gearBtn.addEventListener('click', function () { renderSettings(); });
     head.appendChild(gearBtn);
 
     rootEl.appendChild(head);
@@ -648,7 +606,7 @@
 
     container.appendChild(rootEl);
 
-    if (getKey()) renderChat(); else renderSetup(false);
+    renderChat();
   }
 
   window.AssistantTab = { mount: mount };

@@ -1,0 +1,11 @@
+# File da NON servire come sito statico (restano nel repo, ma non pubblicati).
+# Privacy: i .md di progetto contengono riferimenti clinici → non vanno serviti.
+# Il codice del Worker e la config non devono essere scaricabili.
+worker.js
+wrangler.jsonc
+.assetsignore
+.gitignore
+*.md
+docs/
+serve.cmd
+middleware.js

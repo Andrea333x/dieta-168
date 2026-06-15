@@ -9,7 +9,7 @@
 ## 1. Principi architetturali (non negoziabili)
 - **PWA statica vanilla**: HTML + CSS + JS puro, **zero build step**, **zero dipendenze di rete/runtime**.
 - **Offline-first**: service worker (`sw.js`) network-first con fallback cache; tutti i dati embedded in JS.
-- **Privacy locale**: ogni dato utente vive solo in `localStorage` sul dispositivo. Nessun backend.
+- **Privacy locale**: ogni dato utente (spunte, diario, cronologia chat) vive solo in `localStorage` sul dispositivo. L'unica logica server è il **proxy `/api/coach`** dentro lo stesso Worker che ospita l'app (`worker.js`): inoltra le richieste del coach a NVIDIA tenendo la key lato server (`NVIDIA_API_KEY`). Non è un backend dati: non persiste nulla, è solo un passaggio necessario perché NVIDIA non accetta chiamate dirette dal browser (CORS). Tutto è dietro Cloudflare Access.
 - **Mobile-first iOS**: installabile via Safari → "Aggiungi a schermata Home"; safe-area, dark-first.
 - **Dati sanitari**: l'app va pubblicata **solo dietro accesso protetto** (vedi `docs/deploy.md`).
 
@@ -22,7 +22,10 @@ middleware.js           cancello password per Vercel (Edge) — alternativa a Cl
 serve.cmd               server locale di test (doppio click → http://localhost:8080)
 css/app.css             design system (token :root + theme-light) e stili componenti
 js/app.js               cuore app: router tab, render, tracking, Diario, eventi (IIFE, 'use strict')
-js/assistant.js         tab AI (window.AssistantTab) — API Anthropic diretta dal client
+js/assistant.js         tab AI (window.AssistantTab) — coach via POST /api/coach (formato OpenAI)
+worker.js               Worker Cloudflare: serve gli asset + proxy /api/coach → NVIDIA (key = secret NVIDIA_API_KEY)
+wrangler.jsonc          config deploy Worker (main=worker.js, binding asset ASSETS)
+.assetsignore           file NON serviti come sito (worker.js, config, *.md con dettagli clinici)
 js/data/diet.js         window.DIET_DATA — piano, porzioni, integratori, spesa, meal prep, biohacking
 js/data/recipes.js      window.RECIPES — 43 ricette con filtri
 js/data/tips.js         window.TIPS — 42 tips in 10 categorie
@@ -84,9 +87,10 @@ Tutte serializzate JSON via `getState/setState`. **Tutte incluse nell'export bac
 | `times_<YYYY-MM-DD>` | `{ lui:{sveglia,pasto1,sonno}, lei:{…} }` | orari per indicatore regolarità |
 | `cycle` | `{ lastStart:'YYYY-MM-DD', len:Number }` | ciclo (solo lei, solo locale) |
 | `notes` | `[{date,persona,text}]` | diario/note per le visite (max 300) |
-| `ai_key` | string | API key Anthropic — **MAI esportata né accettata in import** |
-| `ai_model` | string | modello AI selezionato |
-| `ai_chat` | array | cronologia chat AI |
+| `ai_model` | string | modello coach selezionato (`moonshotai/kimi-k2.6` \| `z-ai/glm-5.1`) |
+| `ai_chat` | array | cronologia chat AI (solo locale) |
+
+> ⚠️ Da **v1.3.0** non esiste più `ai_key`: la chiave del coach è un **secret del Worker** (`NVIDIA_API_KEY`), non vive sul dispositivo. (Storicamente `dieta_ai_key` conteneva la API key Anthropic ed era esclusa da export/import — ora è proprio rimossa.)
 
 Derivati (non persistiti): streak/heatmap calcolati al volo dai `track_*`; `spesaHide` (toggle UI runtime).
 

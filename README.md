@@ -44,10 +44,15 @@ py -m http.server 8080                  # oppure: python -m http.server 8080
 ```
 Se la porta è occupata, usa 8081. In locale non c'è password (sei solo tu sul PC).
 
-## Assistente AI
-Nella tab AI inserisci la tua **API key Anthropic** (viene salvata solo in locale sul dispositivo,
-mai inviata altrove). L'assistente conosce: piano settimanale, porzioni, divieti, integratori,
-meal prep, ricette — e risponde nel rispetto dei vincoli clinici di entrambi.
+## Assistente AI (coach)
+La tab 🤖 AI è un coach che conosce a memoria piano settimanale, porzioni, divieti, integratori,
+meal prep e ricette, e risponde nel rispetto dei vincoli clinici di entrambi. Dal pulsante ⚙️ si
+sceglie il **modello**: **Kimi K2.6** (default) o **GLM-5.1**, entrambi via NVIDIA build.
+
+**Niente API key da inserire sul telefono.** Le richieste passano dal vostro Worker Cloudflare
+(`worker.js`, rotta `/api/coach`) che le inoltra a NVIDIA con la chiave tenuta **solo lato server**
+come secret `NVIDIA_API_KEY` (vedi `docs/deploy.md`). Questo serve perché NVIDIA non accetta chiamate
+dirette dal browser. La cronologia della chat resta solo sul dispositivo.
 
 ## Struttura progetto
 ```
