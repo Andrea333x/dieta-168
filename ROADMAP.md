@@ -38,8 +38,9 @@ Nuova tab 📔 **Diario** come contenitore del tracking personale.
 ---
 
 ## 👈 Prossimo passo per l'utente (azioni non di codice)
-- [ ] **Deploy protetto** seguendo `docs/deploy.md` (consigliata: Cloudflare Pages + Access) e installazione su iPhone via Safari → "Aggiungi a schermata Home" (necessario anche per persistenza dati e notifiche)
-- [ ] Inserire la **API key Anthropic** nella tab AI (console.anthropic.com) — consiglio: impostare un **limite di spesa** sulla key come rete di sicurezza
+- [x] **Deploy protetto** fatto: online su **https://dieta333ai.uk** (Cloudflare Worker) dietro **Cloudflare Access** (login per email). Aggiornamenti via `git push`. Vedi `docs/deploy.md` §"Setup ATTUALE in produzione".
+- [x] **Coach AI** configurato: secret Worker `NVIDIA_API_KEY` (modelli Kimi K2.6 / GLM-5.1). Consiglio: tenere un **limite di spesa** sulla key NVIDIA come rete di sicurezza.
+- [ ] **Installare la PWA** su entrambi gli iPhone dal nuovo URL (Safari → login → Aggiungi a schermata Home)
 - [ ] **Segnalare al nutrizionista** la contraddizione del sorgente Meal Prep (salsa di soia nell'hack fried rice vs divieto soia di LEI)
 - [ ] Decidere con i curanti i punti [MEDICO]/[DENTISTA] emersi nella research v2 (timing pillola, floor calorico, eventuale mio-inositolo+selenio, frequenza bicarbonato)
 

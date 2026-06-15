@@ -24,15 +24,16 @@ badge "ordine del piatto" e guida "come rompo il digiuno" sul Pasto 1. Le **Rice
 e filtri clinici (#pro-gengive, #anti-infiammatorio).
 
 ## Installazione su iPhone (hosting protetto)
-L'app contiene dati sanitari personali: va pubblicata **solo con accesso protetto**.
-Segui **[docs/deploy.md](docs/deploy.md)** — guida passo-passo per:
-- ⭐ **Cloudflare Pages + Access** (consigliata): login per email specifica, solo voi due
-- 🔑 **Vercel + password condivisa**: il cancello è già pronto (`middleware.js` + variabile `APP_PASSWORD`)
-- ⚠️ GitHub Pages: **non usarlo** — non si può proteggere
-- Supabase: non è un hosting; utile in futuro per sincronizzare i dati tra dispositivi
+L'app contiene dati sanitari personali: è pubblicata **solo con accesso protetto**.
 
-Poi su iPhone: apri l'URL in **Safari** → login → **Condividi → Aggiungi a schermata Home**.
-L'app funziona **offline** dopo la prima apertura.
+**In produzione (attuale)**: gira su **Cloudflare Workers**, repo GitHub **privata**, online su
+**https://dieta333ai.uk** dietro **Cloudflare Access** (login per email — solo la coppia). Ogni
+aggiornamento è un `git push` (Cloudflare ripubblica da solo). Setup completo e ripetibile in
+**[docs/deploy.md](docs/deploy.md)** (§"Setup ATTUALE in produzione") — lì anche il secret del coach
+`NVIDIA_API_KEY` e le alternative storiche (Pages/Vercel).
+
+Su iPhone: apri **https://dieta333ai.uk** in **Safari** → login → **Condividi → Aggiungi a schermata Home**.
+L'app funziona **offline** dopo la prima apertura. ⚠️ Se in futuro cambi dominio: ri-aggiungi l'host in Access e reinstalla la PWA.
 
 ### Test rapido in locale (PC)
 **Doppio click su `serve.cmd`**: apre da solo il browser su http://localhost:8080.

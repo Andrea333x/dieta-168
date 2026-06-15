@@ -1,6 +1,12 @@
 # Changelog
 
 ## [Unreleased]
+### Infrastruttura / deploy (non è una nuova versione dell'app)
+- Progetto messo sotto **git** e collegato a **Cloudflare Workers**: deploy ad ogni `git push` (`npx wrangler deploy`).
+- Online sul dominio custom **https://dieta333ai.uk** (Cloudflare Registrar) dietro **Cloudflare Access** (login per email, solo la coppia). URL `*.workers.dev` e preview URL **spenti** (`workers_dev:false`, `preview_urls:false`).
+- Coach AI configurato in produzione: secret del Worker `NVIDIA_API_KEY`.
+- `.gitignore` esclude dal repo i dati sensibili non-runtime; `.assetsignore` impedisce di servire `*.md`/config/`worker.js`.
+- `docs/deploy.md` riscritto con il **setup reale** (§"Setup ATTUALE in produzione"); le vecchie opzioni Pages/Vercel restano come alternative storiche.
 
 ## [1.3.0] — 2026-06-15
 ### Cambiato (assistente AI: da Claude a coach NVIDIA, con proxy)

@@ -6,11 +6,35 @@ L'app contiene **dati sanitari personali** (condizioni cliniche, farmaci, dieta)
 2. Se usi Git, la **repository deve essere PRIVATA**.
 3. La protezione deve stare **davanti a tutti i file** (anche `js/data/diet.js` contiene i dati).
 
-Qui sotto le opzioni, dalla più consigliata.
+Qui sotto: prima il **setup reale in produzione** (quello live), poi le alternative storiche.
 
 ---
 
-## ⭐ Opzione A — Cloudflare Pages + Cloudflare Access (consigliata)
+## ✅ Setup ATTUALE in produzione (canonico)
+> Questo è ciò che è configurato e funziona oggi. Le "Opzioni A/B/C" più sotto sono alternative storiche, tenute come riferimento.
+
+- **Hosting**: Cloudflare **Worker** (non Pages) collegato alla **repo GitHub privata** `dieta-168`. `worker.js` serve la PWA come sito statico **e** fa da proxy `/api/coach` per il coach AI. Config in `wrangler.jsonc` (`main: worker.js`, binding asset `ASSETS`).
+- **Aggiornamenti**: ogni `git push` su `main` → Cloudflare ribuilda con **deploy command `npx wrangler deploy`** (build command vuoto). Nessun upload manuale.
+- **Dominio**: dominio custom **`https://dieta333ai.uk`** (Cloudflare Registrar, a costo). `*.workers.dev` e i preview URL sono **spenti** (`workers_dev:false`, `preview_urls:false`).
+- **Login (la protezione vera)**: Cloudflare **Zero Trust → Access**, applicazione self-hosted sull'host `dieta333ai.uk`, policy **Allow → Emails** (le due email della coppia), **One-time PIN**, sessione **1 mese**.
+- **`.assetsignore`**: esclude dai file *serviti* `worker.js`, la config e **tutti i `.md`** (i documenti con dettagli clinici non sono scaricabili).
+- **Coach AI**: secret Worker **`NVIDIA_API_KEY`** (vedi sezione dedicata sotto), modelli Kimi K2.6 / GLM-5.1 via proxy.
+
+### Rifare il setup da zero (promemoria)
+1. Repo GitHub **privata** → `git push`.
+2. Cloudflare → **Workers & Pages → Create**: collega la repo. Deploy command `npx wrangler deploy`, build command vuoto.
+3. (Opzionale) **Custom Domain** sul Worker: con Cloudflare Registrar compra un dominio a costo → Worker → Settings → Domains & Routes → **Add Custom Domain**.
+4. **Zero Trust → Access → Applications → Add** (Self-hosted / Workers): host = il dominio, policy **Allow → Emails** (le due), **One-time PIN**.
+5. Imposta il secret **`NVIDIA_API_KEY`** (Worker → Settings → Variables and Secrets — possibile **solo dopo** che il Worker ha `worker.js`, cioè dopo il primo push del proxy).
+6. Installa la PWA su iPhone via Safari → login → **Aggiungi a Home**.
+
+> ⚠️ **Ogni volta che cambi l'URL/dominio**: ri-aggiungi l'host in **Access** (un dominio nuovo NON eredita il login → resterebbe pubblico) **e reinstalla** la PWA sui telefoni (l'icona vecchia punta all'URL morto).
+
+---
+
+## 📦 Alternative storiche (riferimento)
+
+## ⭐ Opzione A — Cloudflare Pages + Cloudflare Access
 
 **Login vero per persone specifiche**: tu e lei entrate con la vostra email (codice OTP via mail). Nessuno fuori dalla lista entra, neanche conoscendo l'URL. **Gratis** (Access è free fino a 50 utenti).
 

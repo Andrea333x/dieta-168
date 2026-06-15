@@ -122,7 +122,7 @@ Derivati (non persistiti): streak/heatmap calcolati al volo dai `track_*`; `spes
 2. Aggiorna **`CHANGELOG.md`** (nuova versione, Aggiunto/Modificato/Note) e **`ROADMAP.md`** (voci fatte).
 3. Aggiorna **`README.md`** se cambia l'esperienza utente, e **`ORCHESTRATOR.md`** se cambiano stato/schemi/decisioni.
 4. Aggiorna la **memoria** `~/.claude/.../memory/project-dieta-app.md` + `MEMORY.md` se cambia lo stato del progetto.
-5. Deploy protetto (Cloudflare Pages + Access consigliato) — vedi `docs/deploy.md`.
+5. Deploy: `git push` su `main` → Cloudflare ribuilda il **Worker** (deploy command `npx wrangler deploy`) e l'app si aggiorna su **`https://dieta333ai.uk`** (dietro Access). Setup completo in `docs/deploy.md` §"Setup ATTUALE in produzione".
 
 ## 10. Cose da NON fare (limiti piattaforma / scelte deliberate)
 - **Web Push / notifiche locali schedulate**: richiedono backend o non sono affidabili su iOS PWA → fuori scope. Per i reminder reali, futura via `.ics` Calendario (roadmap 1.4).

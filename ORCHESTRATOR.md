@@ -108,4 +108,12 @@ README.md · CHANGELOG.md · ROADMAP.md
 - Il progetto è un **repo git** (`main`, dal 2026-06-15). La repo su GitHub deve essere **SEMPRE privata** (dati sanitari). Mai GitHub Pages (vedi `docs/deploy.md`).
 - `.gitignore` esclude i dati sensibili **non necessari a runtime**: i 2 `.md` sorgente della dieta, `docs/research.md`, i backup esportati (`dieta-backup-*.json`), segreti (`.env`, chiavi), e config locale (`.claude/`, `.playwright-mcp/`). Questi NON devono MAI entrare nella history git.
 - **Limite onesto da ricordare**: i file runtime (`js/data/diet.js`, `js/assistant.js`, `app.js`, `tips.js`, `recipes.js`) contengono inevitabilmente i riferimenti clinici e DEVONO stare nel repo perché l'app funzioni. Quindi la patologia NON è del tutto eliminabile dal repo: la protezione reale è **repo privata + Cloudflare Access** (email-gated), non il `.gitignore`.
-- **Prima di ogni push**: verificare con `git ls-files` che nessun file sensibile non-runtime sia tracciato (i sorgente .md / research.md / backup devono restare fuori). Workflow update consigliato: repo privata collegata a Cloudflare Pages → ogni release è un `git push` (ricordare il bump `CACHE` in sw.js a monte).
+- **Prima di ogni push**: verificare con `git ls-files` che nessun file sensibile non-runtime sia tracciato (i sorgente .md / research.md / backup devono restare fuori). Workflow update: ogni release è un `git push` (ricordare il bump `CACHE` in sw.js a monte).
+
+## Deploy in produzione (attuale)
+- **Live su `https://dieta333ai.uk`** (dominio custom Cloudflare Registrar, a costo), dietro **Cloudflare Access** (Zero Trust → Access, self-hosted; policy Allow→Emails = le 2 email della coppia; One-time PIN; sessione 1 mese).
+- **Hosting = Cloudflare Worker** (non Pages) collegato alla repo privata `dieta-168`: `worker.js` serve la PWA **e** fa da proxy `/api/coach`. Deploy ad ogni `git push` (deploy command `npx wrangler deploy`, build vuoto).
+- `*.workers.dev` e preview URL **spenti** (`workers_dev:false`, `preview_urls:false`). `.assetsignore` esclude dai file serviti `worker.js`/config/`*.md`.
+- **Coach AI**: secret Worker `NVIDIA_API_KEY` (Kimi K2.6 / GLM-5.1). Il secret è impostabile solo dopo il primo deploy del Worker col proxy.
+- ⚠️ **Cambio URL/dominio** = ri-aggiungere l'host in **Access** (un dominio nuovo NON eredita il login) **+ reinstallare** la PWA sui telefoni. Procedura completa in `docs/deploy.md` §"Setup ATTUALE in produzione".
+- Le vecchie note (Pages drag-drop / Vercel `middleware.js` / GitHub Pages vietato) restano in `docs/deploy.md` come **alternative storiche**; la via reale è questa.
