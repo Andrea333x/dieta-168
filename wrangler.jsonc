@@ -1,0 +1,12 @@
+{
+  // Config per pubblicare la PWA come sito STATICO su Cloudflare Workers.
+  // Nessun codice server: serve solo i file della cartella come asset.
+  // Deploy command da impostare su Cloudflare: "npx wrangler deploy"
+  // (build command: lasciare vuoto). La protezione login si fa con
+  // Cloudflare Access, separatamente. Vedi docs/deploy.md.
+  "name": "dieta-168",
+  "compatibility_date": "2026-06-01",
+  "assets": {
+    "directory": "."
+  }
+}
