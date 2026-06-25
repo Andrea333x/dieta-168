@@ -6,7 +6,7 @@
 // ============================================================
 'use strict';
 
-const CACHE = 'dieta-v6';
+const CACHE = 'dieta-v8';
 
 const ASSETS = [
   './',

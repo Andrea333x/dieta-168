@@ -44,13 +44,16 @@ docs/deploy.md        → guida deploy protetto
 README.md · CHANGELOG.md · ROADMAP.md
 ```
 
-## Squadra subagent (ruoli fissi)
-1. **Data engineer** → estrazione MD → `js/data/diet.js` (schema sotto)
-2. **Content/recipes** → ricette + tips/alternative → `js/data/recipes.js`, `js/data/tips.js`
-3. **Researcher** → ricerche web utili alla causa → `docs/research.md`
-4. **Frontend/UX** → shell PWA, design system, tab, mobile iOS
-5. **AI integration** → tab assistente
-6. **QA/Audit** → test completo, responsive, PWA, accessibilità
+## Squadra subagent (definiti in `.claude/agents/` dal 2026-06-25)
+Agent .md reali, invocabili per `subagent_type` (dopo reload sessione); tutti possono usare `dieta-deep-search` e si **cross-checkano** per evitare info errate. `.claude/` è gitignored → tooling locale.
+1. **dieta-nutrizionista** → guardiano dei vincoli clinici, macro/calorie, sostituzioni sicure (owner concettuale di `js/data/diet.js`)
+2. **dieta-recipe-finder** → ricette compliant → `js/data/recipes.js` (schema sotto)
+3. **dieta-biohacker** → tips/tricks/adjust + note biohacking → `js/data/tips.js`, note pasti
+4. **dieta-deep-search** → ricerca web profonda multi-fonte con verifica incrociata (condiviso)
+5. **dieta-frontend** → shell PWA, design system, `js/app.js` (owner unico, non spezzare), `css/`
+6. **dieta-ai-coach** → assistente `js/assistant.js` + proxy `worker.js`
+7. **dieta-qa** → node-parse + collaudo browser (0 errori), PWA, a11y, compliance clinica
+> Regola: per modifiche al piano, far passare SEMPRE le proposte da `dieta-nutrizionista` (verdetto OK/OK-CON-SOSTITUZIONE/VIETATO) prima di scrivere su `diet.js`/`recipes.js`.
 
 ## Schemi dati (contratto tra agenti — NON cambiare senza aggiornare tutti)
 > Documentazione completa di schemi, chiavi localStorage e procedure in **`docs/architecture.md`** (§5-§9).
@@ -58,6 +61,19 @@ README.md · CHANGELOG.md · ROADMAP.md
 - `RECIPES = [{id,nome,emoji,gradient,momento[],persona,tempoMin,difficolta,mealPrep,tags[],descrizione,ingredienti[{nome,lui,lei}],passaggi[],tips,sicurezzaLei,sicurezzaLui,macros{kcalLui,kcalLei,proteine}}]` · tag clinici: `pro-gengive`, `anti-infiammatorio`
 - `TIPS = [{id,categoria,icona,titolo,testo,persona}]`
 - **Chiavi localStorage** (prefisso `dieta_`, tutte nell'export TRANNE `ai_key`): `persona, theme, start, track_<data>, spesa, prep, fav, mood_<data>, water_<data>, weight, times_<data>, cycle, notes, ai_key, ai_model, ai_chat`
+
+## Stato: v1.5.0 consegnata (2026-06-25)
+- **Stima macro per pasto**: nuova mappa `DIET_DATA.macroByMeal` (chiave `"<idGiorno>-<n>"`, kcal+proteine lui/lei, 21 pasti, stimate dal nutrizionista e verificate nei range, LEI mai <1400). `app.js`: riga macro su ogni card pasto + card "🔢 Stima macro del giorno" in Oggi (somma 3 pasti, confronto target, alert sotto-minimo/proteine basse); helper `dayMacroTotals()`/`MACRO_TARGET`. `DietLogs.contextSummary()` ora include le **kcal/proteine pianificate di oggi** → l'AI può avvisare se LEI è sul minimo calorico.
+- **Mini-tab "🔄 Varianti & rotazione"** sulle card pasti: campo `varianti:[{emoji,nome,stagione,dettaglio}]` su alcuni pasti, reso con `<details>` nativo; `currentSeason()` evidenzia la variante in stagione ("consigliata ora"). Coperti: smoothie (4 combo frutta), giorno seitan (tempeh lui / crema lenticchie inverno), insalata di mare (sgombro inverno), sgombro (giorno veg / orata-merluzzo).
+- **Correzione omega-3**: **venerdì = Sgombro al forno + verdure** (no patate; alt orata/merluzzo); **cozze tolte** dall'insalata di mare; **tempeh** ora è variante (non giorno fisso). Spesa/batch/timing/anti-spreco riallineati; tempi 349′/sett. CACHE `dieta-v8`. Collaudo: node-parse OK + Playwright 0/0 (macro per pasto, card giorno, varianti, sgombro, kcal nel contesto AI).
+
+## Stato: v1.4.0 consegnata (2026-06-25)
+- **Piano settimanale rivisto su richiesta della coppia**, validato da una squadra di subagent dedicati con cross-check e ricerca web. Conflitti clinici risolti (non eseguiti alla cieca):
+  - Mar P1 french toast → **bowl avocado** (no uova → *uova −1*) · Mar P3 pesce+patate → **insalata di mare** (⚠️ **salmone vietato a LUI** → solo polpo/calamari/gamberi/cozze per lui; salmone opzionale solo lei; molluschi **brasati teneri** per parodontite lei) · Mer P3 → **pollo+verdure** (*riso 1×*) · Gio/Sab P2 → **smoothie** (frutta lista chiusa, no semi/soia/yogurt) · Gio P3 lenticchie (estate) → **seitan+verdure** · Ven P3 pesce+patate → **tempeh(lui)/seitan(lei)** (⚠️ **tempeh=soia vietato a LEI**).
+  - **Omega-3**: tolte le 2 cene di pesce grasso → copertura via integratore Omega-3 di pranzo (già nel piano) + cozze; punto [MEDICO] da confermare.
+  - 6 nuove ricette `recipes.js` r44–r49 (totale **49**). Spesa, batch meal-prep, anti-spreco, hack e tempi ricalibrati; `divieti.lei` soia rafforzati (tempeh/tofu/edamame/salsa/latte di soia).
+- **FASE 6.1 — AI proattiva**: `window.DietLogs.contextSummary()` (in `app.js`, solo lettura, nessuna nuova chiave) riassume gli ultimi ~7 giorni di log (aderenza/streak/umore/acqua/peso/orari/ciclo); `assistant.js` lo appende in `buildRuntimeContext()` come "STATO RECENTE" + istruzione di comportamento proattivo.
+- **7 subagent di progetto** creati in `.claude/agents/` (vedi §Squadra). CACHE `dieta-v7`. Collaudo: node-parse OK + browser Playwright 0 errori/0 warning su tutte le tab.
 
 ## Stato: v1.3.0 consegnata (2026-06-15)
 - **Assistente AI migrato da Claude a coach NVIDIA**, con 2 modelli switchabili: **Kimi K2.6** (`moonshotai/kimi-k2.6`, default) e **GLM-5.1** (`z-ai/glm-5.1`). Claude rimosso del tutto.

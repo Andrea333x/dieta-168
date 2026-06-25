@@ -35,6 +35,18 @@ Implementate in questa release (vedi CHANGELOG): **1.2** spesa con barra/nascond
 **4.1** 15 ricette r29–r43 · **4.2** tag pro-gengive/anti-infiammatorio · **4.3** preferiti · **4.4** varianti stagionali.
 Nuova tab 📔 **Diario** come contenitore del tracking personale.
 
+### v1.4.0 — Revisione piano + AI proattiva ✅ (2026-06-25)
+Modifiche al piano richieste dalla coppia, validate da subagent dedicati (nutrizionista/recipe-finder/biohacker + deep-search, con cross-check) — vedi CHANGELOG:
+- Mar P1 french toast → **bowl avocado** (uova −1) · Mar P3 pesce+patate → **insalata di mare** (no salmone a lui) · Mer P3 → **pollo+verdure** (riso 1×) · Gio/Sab P2 → **smoothie** (2×) · Gio P3 lenticchie → **seitan+verdure** · Ven P3 pesce+patate → **tempeh(lui)/seitan(lei)+verdure**.
+- 6 nuove ricette (r44–r49, totale 49). Spesa/meal-prep/anti-spreco/divieti allineati.
+- **FASE 6.1 — AI proattiva contestuale** (sotto): coach che usa i log del Diario per spunti su misura. ✅
+- Creati 7 subagent di progetto in `.claude/agents/` (nutrizionista, biohacker, recipe-finder, deep-search, frontend, ai-coach, qa).
+
+### v1.5.0 — Macro, varianti & correzione omega-3 ✅ (2026-06-25)
+- **Stima macro/calorie per pasto e per giorno** (`DIET_DATA.macroByMeal`, 21 pasti; card "macro del giorno" in Oggi con alert sotto-minimo per lei). L'AI proattiva ora vede le kcal pianificate di oggi.
+- **Mini-tab "🔄 Varianti & rotazione"** sulle card pasti (`<details>`), con **rotazione stagionale** (`currentSeason()`, badge "consigliata ora") — smoothie 4 combo, seitan/tempeh, insalata di mare/sgombro.
+- **Omega-3**: sgombro reintrodotto al venerdì (no patate); tolte le cozze; tempeh diventa variante del giorno seitan. CACHE `dieta-v8`.
+
 ---
 
 ## 👈 Prossimo passo per l'utente (azioni non di codice)
@@ -247,10 +259,10 @@ sulla spunta (`navigator.vibrate` è ignorato su iOS → solo CSS); Web Share AP
 
 ## 🤖 FASE 6 — Evoluzione AI & architettura
 
-### 6.1 — AI proattiva contestuale 🟡 · MEDIA
-**Cosa:** iniettare i log (mood/peso/aderenza/proteine) nel system prompt così l'assistente dà spunti
-("LEI sotto 1.400 kcal da 3 giorni: attenzione").
-**Perché:** differenzia da tutte le AI generiche dei competitor; riusa l'infrastruttura `assistant.js` esistente.
+### 6.1 — AI proattiva contestuale ✅ FATTO (v1.4.0)
+**Cosa:** iniettare i log (mood/peso/aderenza/idratazione/orari/ciclo) nel contesto runtime del system prompt così l'assistente dà spunti su misura.
+**Implementato:** `window.DietLogs.contextSummary()` in `app.js` riassume gli ultimi ~7 giorni; `assistant.js` lo appende in `buildRuntimeContext()` come blocco "STATO RECENTE", con istruzione di comportamento proattivo (con tatto, niente numeri grezzi). Solo lettura, nessuna nuova chiave localStorage.
+**Estensione fatta (v1.5.0):** stima proteine/calorie giornaliere → l'AI riceve le kcal pianificate di oggi e può avvisare se LEI è sul minimo calorico. Basata su `DIET_DATA.macroByMeal`.
 
 ### 6.2 — Sync tra i 2 device — Opzione A (export/import con merge) 🟡 · MEDIA · realistica
 **Cosa:** migliorare l'export con **merge intelligente** all'import (unione dei `track` per data, non sovrascrittura)

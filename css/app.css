@@ -486,6 +486,31 @@ ol.steps li { margin-bottom: 8px; }
 }
 .ob-arrow { color: var(--text-dim); }
 details.mini.rompo { background: var(--ok-soft); }
+details.mini.varianti { background: var(--accent-soft); }
+
+/* ---------- stima macro (per pasto + giorno) ---------- */
+.macro-row { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0 2px; }
+.macro-chip {
+  font-size: 12px; font-weight: 600; color: var(--text-dim);
+  background: var(--surface-2); border: 1px solid var(--border);
+  border-radius: 999px; padding: 2px 9px;
+}
+.v-now {
+  font-size: 11px; font-weight: 700; color: var(--ok);
+  background: var(--ok-soft); border-radius: 999px; padding: 1px 7px; margin-left: 4px;
+}
+.card.macro-day h2 { margin-bottom: 8px; }
+.macro-day-row {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px;
+  padding: 6px 0; border-top: 1px solid var(--border); font-size: 14px;
+}
+.macro-day-row:first-of-type { border-top: 0; }
+.macro-day-row small { color: var(--text-dim); font-weight: 400; }
+.macro-ok { color: var(--ok); font-weight: 700; font-size: 12.5px; }
+.macro-flag {
+  color: var(--warn); font-weight: 700; font-size: 12.5px;
+  background: var(--warn-soft); border-radius: 999px; padding: 1px 8px;
+}
 
 /* ---------- diario: streak + heatmap ---------- */
 .streak-badge {

@@ -241,6 +241,7 @@
     L.push('- Rispetta SEMPRE i divieti: MAI proporre semi, cibi duri/croccanti, pomodoro fresco intero o frutta vietata a LEI; MAI uova non ben cotte, tonno, salmone, yogurt o ricotta a LUI. Vale anche per varianti, ristoranti e sgarri.');
     L.push('- Quando l\'utente vuole variare un pasto, proponi alternative compatibili con i vincoli di ENTRAMBI (o specifica per chi vale), attingendo prima dal ricettario e dal piano.');
     L.push('- Se ti chiedono "cosa mangio oggi/adesso", usa il giorno e l\'ora correnti (forniti nel contesto runtime) per indicare il pasto giusto del piano.');
+    L.push('- Se nel contesto runtime trovi lo "STATO RECENTE DELLA COPPIA" (aderenza pasti, umore, peso, idratazione, orari, ciclo), usalo per dare spunti PROATTIVI e su misura — es. «LEI è indietro con l\'acqua oggi, un paio di bicchieri in più», «aderenza in calo negli ultimi giorni: ripartiamo dal Pasto 1», «orari del sonno irregolari per LUI: ancora più importante il caffè entro le 17». Fallo con tatto, una osservazione utile alla volta, mai allarmista e mai mostrando i numeri grezzi come una tabella. Se i dati non ci sono, non inventarli.');
     L.push('- Sgarri: tono comprensivo, mai colpevolizzante. Uno sgarro isolato è rumore statistico: NON suggerire mai di compensare digiunando di più o scendendo sotto le calorie minime. Se una cena finisce dopo le 21, suggerisci di spostare la finestra, non di romperla.');
     L.push('- Domande mediche (dosi di farmaci, sintomi, modifiche cliniche, TSH, terapie): NON rispondere con prescrizioni; rimanda con gentilezza a medico/endocrinologo/parodontologo. Puoi spiegare i principi generali già nel piano.');
     L.push('- Tono: incoraggiante, da coach alleato della coppia. Quando utile distingui le risposte "per lui" e "per lei".');
@@ -257,7 +258,16 @@
     var now = new Date();
     var hh = String(now.getHours()).padStart(2, '0');
     var mm = String(now.getMinutes()).padStart(2, '0');
-    return 'Contesto runtime: oggi è ' + giorni[now.getDay()] + ' ' + now.getDate() + ' ' + mesi[now.getMonth()] + ' ' + now.getFullYear() + ', ore ' + hh + ':' + mm + ' (ora locale). Usalo per capire qual è il giorno del piano e quale pasto è il prossimo.';
+    var base = 'Contesto runtime: oggi è ' + giorni[now.getDay()] + ' ' + now.getDate() + ' ' + mesi[now.getMonth()] + ' ' + now.getFullYear() + ', ore ' + hh + ':' + mm + ' (ora locale). Usalo per capire qual è il giorno del piano e quale pasto è il prossimo.';
+
+    // FASE 6.1 — Stato recente dai log del Diario (proattività contestuale)
+    try {
+      if (window.DietLogs && typeof window.DietLogs.contextSummary === 'function') {
+        var s = window.DietLogs.contextSummary();
+        if (s) base += '\n\nSTATO RECENTE DELLA COPPIA (dai log del Diario — usalo per spunti proattivi e su misura, con tatto; non ripeterlo come una tabella di numeri):\n' + s;
+      }
+    } catch (e) {}
+    return base;
   }
 
   // ---------- Storia per l'API: ultimi 12, ruoli alternati, primo = user ----------

@@ -8,6 +8,42 @@
 - `.gitignore` esclude dal repo i dati sensibili non-runtime; `.assetsignore` impedisce di servire `*.md`/config/`worker.js`.
 - `docs/deploy.md` riscritto con il **setup reale** (§"Setup ATTUALE in produzione"); le vecchie opzioni Pages/Vercel restano come alternative storiche.
 
+## [1.5.0] — 2026-06-25
+### Aggiunto
+- **Stima macro per pasto e per giorno**: ogni pasto mostra una riga con **kcal e proteine** stimate per lui/lei; in **Oggi** una card **"🔢 Stima macro del giorno"** somma i 3 pasti e li confronta con i target, con **alert se LEI scende sotto il minimo di 1.400 kcal** o se le proteine sono sotto target. Nuova mappa `DIET_DATA.macroByMeal` (21 pasti, stime CREA/USDA validate dal nutrizionista: tutti i giorni nei range, LEI mai <1.400). Helper `dayMacroTotals()` in `app.js`.
+- **AI proattiva con consapevolezza calorica**: lo "STATO RECENTE" passato al coach ora include le **kcal/proteine pianificate per oggi** vs obiettivo, così può avvisare es. «occhio: oggi LEI è sul minimo calorico, aggiungiamo una fonte proteica morbida».
+- **Mini-tab "🔄 Varianti & rotazione"** sulle card dei pasti (elemento `<details>` cliccabile): mostra alternative e **rotazione stagionale**. La variante in stagione (estate/inverno) è marcata **"consigliata ora"** via `currentSeason()`. Popolato su: smoothie (4 combinazioni di frutta consentita), giorno seitan (tempeh per lui / crema di lenticchie d'inverno), insalata di mare (sgombro al forno d'inverno), sgombro (giorno veg / orata-merluzzo).
+
+### Cambiato
+- **Omega-3 ripristinato con lo sgombro**: il **venerdì** torna **Sgombro al forno + verdure** (NIENTE patate; alternative orata/merluzzo) come fonte settimanale di omega-3. Il **tempeh** non è più un giorno fisso ma una **variante** del giorno seitan (proteina veg "per mixare"). **Tolte le cozze** dall'insalata di mare (resta polpo/calamari/gamberi; salmone opzionale solo per lei). Spesa, batch, timing e anti-spreco riallineati; tempi giornalieri aggiornati (totale 349′/sett).
+- Service worker: cache **`dieta-v8`**.
+
+### Collaudo
+- `node --check` su tutti i JS: OK. Browser (Playwright) 0 errori/0 warning: verificati le 3 righe macro per pasto, la card macro del giorno (giovedì veg: LUI 1980/118g, LEI 1460/90g con flag "proteine sotto target"), i mini-tab varianti, lo sgombro al venerdì e le kcal pianificate nel contesto AI.
+
+## [1.4.0] — 2026-06-25
+### Cambiato (piano settimanale rivisto su richiesta della coppia)
+Tutte le modifiche validate contro i vincoli clinici da una squadra di subagent dedicati (nutrizionista + recipe-finder + biohacker con ricerca web e cross-check reciproco). I conflitti clinici sono stati risolti, non eseguiti alla cieca:
+- **Martedì P1**: tolto il **French Toast** → **Bowl fredda con avocado** (proteine da mozzarella + pollo freddo, **niente uova** → realizza la richiesta "uova 1 volta in meno a settimana").
+- **Martedì P3**: tolto **pesce + patate** (orata) → **Insalata di mare fatta in casa**. ⚠️ **Salmone VIETATO a LUI** (è nei suoi divieti): la sua porzione è polpo/calamari/gamberi/cozze; il salmone è opzionale **solo per lei**. Molluschi **brasati a lungo finché teneri** per la parodontite di lei (niente gommoso/croccante).
+- **Mercoledì P3**: tolto il **riso basmati** → **Pollo con verdure miste** in umido (sovracoscia morbida per lei). Così il **riso resta 1 volta a settimana** (risotto della domenica), come la pasta.
+- **Giovedì P2**: **Smoothie di frutta** (1 di 2). **Sabato P2**: **Smoothie di frutta** (2 di 2). Solo frutta della lista consentita di lei (banana/mango/pesca/melone/pera), **niente semi**; base latte (no yogurt per lui, **no bevanda di soia** per lei).
+- **Giovedì P3**: tolta la **crema di lenticchie** (stagione estiva) → **Seitan con verdure miste** (il seitan è glutine, **non soia** → ok anche per lei) + un cucchiaio di legumi per completare la lisina. D'inverno la crema di lenticchie può tornare.
+- **Venerdì P3**: tolto **pesce + patate** (sgombro/purè) → giorno proteico-vegetale **Tempeh (lui) / Seitan (lei)**. ⚠️ **Tempeh VIETATO a LEI** (è soia → interferisce con la levotiroxina): la sua versione usa **seitan**.
+- **Omega-3**: rimosse le due cene di pesce grasso, la copertura resta affidata all'integratore Omega-3 di pranzo (già nel piano) + cozze dell'insalata di mare. Nota aggiunta in anti-spreco/biohacking; punto da confermare col nutrizionista.
+
+### Aggiunto
+- **6 nuove ricette** (`recipes.js`, r44–r49): Insalata di mare · Seitan con verdure · Tempeh/Seitan con verdure · Pollo con verdure · Smoothie di frutta consentita · Bowl fredda con avocado. Ricettario da 43 → **49 ricette**.
+- **FASE 6.1 — Assistente AI proattivo e contestuale**: il coach ora riceve nel contesto runtime uno **STATO RECENTE** dai log del Diario (aderenza pasti 7gg, streak, umore, idratazione, peso+trend, regolarità orari, ciclo di lei) e lo usa per spunti su misura («LEI indietro con l'acqua oggi», «aderenza in calo: ripartiamo dal Pasto 1»), con tatto e senza mostrare numeri grezzi. Nuovo `window.DietLogs.contextSummary()` in `app.js` (solo lettura, difensivo, **nessuna nuova chiave localStorage**), agganciato da `assistant.js` in `buildRuntimeContext()`.
+- **7 subagent dedicati di progetto** (`.claude/agents/`): `dieta-nutrizionista`, `dieta-biohacker`, `dieta-recipe-finder`, `dieta-deep-search` (ricerca web condivisa con cross-verifica), `dieta-frontend`, `dieta-ai-coach`, `dieta-qa`.
+
+### Modificato
+- `diet.js`: lista **spesa** ricalibrata (via misto mare/salmone-solo-lei/seitan/tempeh/legumi; più peperoni e avocado; meno patate; via basmati-cena e farro), **batch meal prep**, **anti-spreco** e **hack** allineati ai nuovi piatti, tempi giornalieri aggiornati (totale 347′/settimana), **divieti di lei** rafforzati sulla soia (tempeh/tofu/edamame/salsa/latte di soia).
+- Service worker: cache **`dieta-v7`**.
+
+### Collaudo
+- `node --check` su tutti i file JS: OK. Collaudo browser (Playwright) su Oggi/Settimana/Ricette/Tips/Diario/AI: **0 errori, 0 warning**. Verificati: 49 ricette caricate, i 7 slot aggiornati, french toast/lenticchie rimossi, riso 1x, `contextSummary()` produce il riassunto proattivo da log seminati.
+
 ## [1.3.0] — 2026-06-15
 ### Cambiato (assistente AI: da Claude a coach NVIDIA, con proxy)
 - L'assistente non usa più Anthropic/Claude. Ora è un **coach via NVIDIA build**, con **due modelli selezionabili**: **Kimi K2.6** (`moonshotai/kimi-k2.6`, default) e **GLM-5.1** (`z-ai/glm-5.1`).

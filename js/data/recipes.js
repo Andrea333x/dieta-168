@@ -1404,6 +1404,205 @@ const RECIPES = [
     sicurezzaLei: 'Pane morbido senza semi ✅ · cottura dolce = morbido ✅ · uovo ben cotto nella panatura ✅',
     sicurezzaLui: 'Uovo della "carrozza" completamente rappreso ✅ · pane (carbo) con mozzarella (proteine) ✅',
     macros: { kcalLui: '~470', kcalLei: '~360', proteine: 'alte' }
+  },
+
+  // ══════════════════════════════════════════════
+  // AGGIUNTE v1.4.0 — nuove richieste della coppia (6 ricette)
+  // Insalata di mare · seitan/tempeh con verdure · pollo con verdure ·
+  // smoothie frutta consentita · bowl avocado freddo P1
+  // ══════════════════════════════════════════════
+
+  {
+    id: 'r44',
+    nome: 'Insalata di mare fatta in casa',
+    emoji: '🦑',
+    gradient: ['#0ea5e9', '#0369a1'],
+    momento: ['P3'],
+    persona: 'entrambi',
+    tempoMin: 50,
+    difficolta: 'media',
+    mealPrep: true,
+    tags: ['pesce', 'fredda', 'senza-semi', 'morbido', 'proteico', 'anti-infiammatorio'],
+    descrizione: 'Insalata di mare di casa, senza salmone (vietato a lui): polpo, calamari e gamberi cotti finché teneri e conditi a freddo con olio EVO, limone e prezzemolo. Niente fritto, niente semi, molluschi cotti a lungo per le gengive di lei.',
+    ingredienti: [
+      { nome: 'Polpo (meglio surgelato, più tenero)', lui: '160g', lei: '130g (ben cotto, a pezzi piccoli)' },
+      { nome: 'Calamari/totani puliti', lui: '120g ad anelli', lei: '90g a pezzetti piccoli' },
+      { nome: 'Gamberi sgusciati', lui: '120g', lei: '110g (ben morbidi)' },
+      { nome: 'Salmone lessato a fiocchi (opzionale, solo lei)', lui: '— (vietato)', lei: 'facoltativo 50g a fiocchi' },
+      { nome: 'Sedano a dadini fini (crudo, solo lui)', lui: '½ costa', lei: '—' },
+      { nome: 'Olio EVO + limone + prezzemolo + aglio', lui: '1 cucchiaio + ½ limone', lei: '1 cucchiaio + ½ limone' }
+    ],
+    passaggi: [
+      'Polpo: se surgelato scongelalo (il freddo rompe le fibre e lo rende più tenero). Immergi i tentacoli nell\'acqua bollente non salata 4–5 volte per arricciarli, poi cuoci a fiamma dolcissima ~40 minuti per kg; verifica con la forchetta e lascialo intiepidire NELLA sua acqua (resta morbidissimo).',
+      'Calamari: lessali 30–40 minuti a fuoco dolce finché cedono alla forchetta (la cottura breve li lascia gommosi: o pochissimi minuti o lunga). Per lei tagliali a pezzetti piccoli.',
+      'Gamberi: cuocili 2–3 minuti finché rosa e morbidi (per lei a pezzi piccoli).',
+      'Taglia tutto a pezzi, condisci ancora tiepido con olio EVO, limone, prezzemolo e aglio tritato; lascia insaporire in frigo 30 minuti.',
+      'Lei: niente sedano crudo, molluschi ben teneri a pezzi piccoli; eventualmente aggiungi il salmone lessato a fiocchi (consentito solo a lei).'
+    ],
+    tips: 'Cuoci polpo e calamari in anticipo (meal prep): conditi durano 1 giorno in frigo e migliorano. Il polpo surgelato viene più tenero del fresco. Se i calamari restano troppo gommosi per lei, sostituiscili con più gamberi.',
+    sicurezzaLei: 'Senza semi ✅ · molluschi cotti a lungo + gamberi morbidi, a pezzi piccoli ✅ · niente sedano crudo (croccante) ✅ · salmone a fiocchi opzionale consentito a lei ✅',
+    sicurezzaLui: 'NIENTE salmone nella sua porzione (vietato) ✅ · frutti di mare consentiti e ben cotti ✅ · senza semi ✅',
+    macros: { kcalLui: '~390', kcalLei: '~320', proteine: 'alte' }
+  },
+
+  {
+    id: 'r45',
+    nome: 'Seitan con verdure miste in padella',
+    emoji: '🍢',
+    gradient: ['#a16207', '#78350f'],
+    momento: ['P3'],
+    persona: 'entrambi',
+    tempoMin: 25,
+    difficolta: 'facile',
+    mealPrep: true,
+    tags: ['proteico', 'padella', 'senza-semi', 'morbido', 'meal-prep', 'curcuma'],
+    descrizione: 'Seitan dorato e poi stufato con zucchine, carote e peperoni finché tutto è morbido: piatto proteico-vegetale per entrambi (il seitan è glutine di frumento, niente soia). Curcuma+pepe nero per la spinta anti-infiammatoria.',
+    ingredienti: [
+      { nome: 'Seitan a fettine/bocconcini', lui: '150g', lei: '130g' },
+      { nome: 'Zucchine a rondelle', lui: '1', lei: '1' },
+      { nome: 'Carote a dadini', lui: '1', lei: '1 (ben morbida)' },
+      { nome: 'Peperoni', lui: '½ a striscioline', lei: '½ sbucciato, ben cotto' },
+      { nome: 'Cipolla + aglio + brodo vegetale', lui: '¼ + q.b. + 100ml', lei: '¼ + q.b. + 100ml' },
+      { nome: 'Olio EVO + curcuma + pepe nero + rosmarino', lui: '1 cucchiaio + q.b.', lei: '1 cucchiaio + q.b.' },
+      { nome: 'Parmigiano a fine cottura (solo lui)', lui: '1 cucchiaio', lei: '—' }
+    ],
+    passaggi: [
+      'Salta il seitan in padella con un filo d\'olio finché dorato sui lati, poi mettilo da parte.',
+      'Nella stessa padella stufa cipolla, carote, peperoni e zucchine con un goccio di brodo finché morbide (per lei: verdure ben cotte, peperoni sbucciati e senza semi).',
+      'Rimetti il seitan, sfuma con il resto del brodo, aggiungi curcuma, pepe nero e rosmarino e cuoci insieme 5 minuti.',
+      'Aggiusta di sale. Lui: spolverata di parmigiano. Lei: verifica che le verdure siano tenere.'
+    ],
+    tips: 'Il seitan è la fonte proteica vegetale più concentrata (~25g proteine/100g) e, essendo glutine di frumento, è SENZA soia: adatto anche a lei. Abbinalo a un cucchiaio di legumi ben cotti per completare gli amminoacidi (il seitan è povero di lisina). Niente salsa di soia (vietata a lei).',
+    sicurezzaLei: 'Seitan = glutine di frumento, NIENTE soia ✅ · verdure ben cotte e morbide ✅ · peperoni sbucciati, senza semi ✅',
+    sicurezzaLui: 'Seitan ben scaldato ✅ · solo parmigiano come formaggio (in lista) ✅ · verdure+proteina nello stesso piatto ✅',
+    macros: { kcalLui: '~420', kcalLei: '~350', proteine: 'alte' }
+  },
+
+  {
+    id: 'r46',
+    nome: 'Tempeh con verdure miste (lei: seitan)',
+    emoji: '🍱',
+    gradient: ['#ca8a04', '#65a30d'],
+    momento: ['P3'],
+    persona: 'entrambi',
+    tempoMin: 25,
+    difficolta: 'facile',
+    mealPrep: true,
+    tags: ['proteico', 'padella', 'senza-semi', 'morbido', 'meal-prep', 'curcuma'],
+    descrizione: 'Tempeh saltato con verdure miste per LUI; per LEI la stessa ricetta con il SEITAN al posto del tempeh (il tempeh è di soia, vietata a lei). Stufato morbido, proteico, una padella sola.',
+    ingredienti: [
+      { nome: 'Proteina principale', lui: 'Tempeh 150g', lei: 'Seitan 130g (NO tempeh: contiene soia)' },
+      { nome: 'Zucchine a rondelle', lui: '1', lei: '1' },
+      { nome: 'Carote a dadini', lui: '1', lei: '1 (ben morbida)' },
+      { nome: 'Peperoni', lui: '½ a striscioline', lei: '½ sbucciato, ben cotto' },
+      { nome: 'Cipolla + aglio + brodo vegetale', lui: '¼ + q.b. + 120ml', lei: '¼ + q.b. + 120ml' },
+      { nome: 'Olio EVO + curcuma + pepe nero + rosmarino', lui: '1 cucchiaio + q.b.', lei: '1 cucchiaio + q.b.' }
+    ],
+    passaggi: [
+      'LUI – tempeh: tagliato a cubi, sbollentalo 8–10 minuti (riduce l\'amaro), poi dora in padella con un filo d\'olio. LEI – seitan: dora direttamente a fettine.',
+      'Metti la proteina da parte e stufa cipolla, carote, peperoni e zucchine con un goccio di brodo finché morbide (per lei: ben cotte, peperoni sbucciati).',
+      'Rimetti tempeh (lui) / seitan (lei), sfuma con il brodo, aggiungi curcuma, pepe nero e rosmarino e cuoci insieme 5 minuti.',
+      'Aggiusta di sale e servi. Niente salsa di soia nella porzione di lei.'
+    ],
+    tips: 'Cucina le due proteine separate ma le verdure insieme: zero lavoro extra. Tempeh ~19g proteine/100g, seitan ~25g/100g: entrambe ottime fonti vegetali. Il tempeh sbollentato prima è più digeribile e meno amaro.',
+    sicurezzaLei: 'NIENTE tempeh (è soia, vietata) → versione lei con SEITAN ✅ · verdure ben cotte morbide ✅ · senza semi, peperoni sbucciati ✅',
+    sicurezzaLui: 'Tempeh consentito (nessun divieto di soia per lui), ben cotto ✅ · piatto vegetale proteico completo ✅',
+    macros: { kcalLui: '~440', kcalLei: '~350', proteine: 'alte' }
+  },
+
+  {
+    id: 'r47',
+    nome: 'Pollo con verdure miste in umido',
+    emoji: '🍗',
+    gradient: ['#f59e0b', '#b45309'],
+    momento: ['P3'],
+    persona: 'entrambi',
+    tempoMin: 30,
+    difficolta: 'facile',
+    mealPrep: true,
+    tags: ['proteico', 'padella', 'senza-semi', 'morbido', 'meal-prep'],
+    descrizione: 'Bocconcini di pollo ben cotti e stufati con zucchine, carote e peperoni: per lei in umido morbido (sovracoscia che si sfalda), per lui sazianti e proteici. Una padella, tante verdure.',
+    ingredienti: [
+      { nome: 'Pollo a bocconcini (sovracoscia per lei = più morbida)', lui: '170g petto o coscia', lei: '140g sovracoscia' },
+      { nome: 'Zucchine a rondelle', lui: '1', lei: '1' },
+      { nome: 'Carote a dadini', lui: '1', lei: '1 (ben morbida)' },
+      { nome: 'Peperoni', lui: '½ a striscioline', lei: '½ sbucciato, ben cotto' },
+      { nome: 'Cipolla + aglio + brodo di pollo', lui: '¼ + q.b. + 150ml', lei: '¼ + q.b. + 150ml' },
+      { nome: 'Olio EVO + rosmarino + curcuma + pepe nero', lui: '1 cucchiaio + q.b.', lei: '1 cucchiaio + q.b.' },
+      { nome: 'Parmigiano a fine cottura (solo lui)', lui: '1 cucchiaio', lei: '—' }
+    ],
+    passaggi: [
+      'Rosola i bocconcini di pollo in padella con olio, cipolla e aglio finché sigillati su tutti i lati.',
+      'Aggiungi carote e peperoni, poi le zucchine, e copri con il brodo caldo.',
+      'Stufa coperto a fuoco dolce 18–22 minuti: il pollo deve risultare SEMPRE ben cotto al centro (niente rosa) e, per lei, la sovracoscia deve sfaldarsi.',
+      'Scoperchia e lascia restringere il fondo; aggiusta di sale, curcuma e pepe nero.',
+      'Lui: spolverata di parmigiano. Lei: verdure tenere e pollo morbido a pezzi piccoli.'
+    ],
+    tips: 'La sovracoscia resta più morbida del petto nelle cotture in umido: scelta ideale per le gengive di lei. Doppia dose e congela in porzioni: cena pronta in 5 minuti.',
+    sicurezzaLei: 'Pollo in umido morbido (sovracoscia che si sfalda) ✅ · verdure ben cotte, peperoni sbucciati ✅ · senza semi ✅',
+    sicurezzaLui: 'Pollo SEMPRE ben cotto al centro (niente rosa) ✅ · solo parmigiano (in lista) ✅ · proteine+verdure insieme ✅',
+    macros: { kcalLui: '~430', kcalLei: '~350', proteine: 'alte' }
+  },
+
+  {
+    id: 'r48',
+    nome: 'Smoothie di frutta consentita con scaglie',
+    emoji: '🥤',
+    gradient: ['#fbbf24', '#fb923c'],
+    momento: ['P2'],
+    persona: 'entrambi',
+    tempoMin: 5,
+    difficolta: 'facile',
+    mealPrep: false,
+    tags: ['dolce', 'estiva', 'fredda', 'senza-semi', 'veloce', 'no-cottura'],
+    descrizione: 'Smoothie cremoso con SOLO frutta della lista di lei (banana, mango, pesca, melone, pera) e latte come base proteica: niente yogurt (vietato a lui), niente bevande di soia (vietate a lei). Versatile: ruota le varianti per coprire le 2 volte a settimana.',
+    ingredienti: [
+      { nome: 'Banana matura', lui: '1 media', lei: '½' },
+      { nome: 'Mango maturo (o pesca sbucciata, vedi varianti)', lui: '½ frutto', lei: '½ frutto' },
+      { nome: 'Latte freddo', lui: '200ml intero', lei: '180ml p. scremato' },
+      { nome: 'Parmigiano a scaglie a parte (quota proteica)', lui: '30g', lei: '20g' },
+      { nome: 'Ghiaccio + cannella (facoltativa)', lui: '3 cubetti', lei: '3 cubetti' }
+    ],
+    passaggi: [
+      'Frulla frutta, latte e ghiaccio fino a crema densa e liscia (1 minuto).',
+      'Versa in un bicchiere grande: deve reggere il cucchiaino.',
+      'Accompagna con le scaglie di parmigiano a parte: la quota proteico-grassa frena il picco glicemico della frutta.'
+    ],
+    tips: 'Varianti per ruotare 2×/settimana — A) banana + mango (estiva); B) banana + pesca sbucciata e snocciolata; C) ½ melone + banana; D) invernale: banana + pera cotta sbucciata. Tutte SOLO frutta della lista di lei: niente frutti di bosco/kiwi (semi). Per lui mai lo smoothie da solo: sempre con la quota di parmigiano. NIENTE yogurt (lui) né bevande di soia (lei).',
+    sicurezzaLei: 'Frutta solo da lista chiusa, sbucciata/snocciolata ✅ · liquido = zero masticazione ✅ · senza semi (no frutti di bosco/kiwi) ✅ · base latte, niente soia ✅',
+    sicurezzaLui: 'Base latte, NIENTE yogurt (vietato) ✅ · carbo semplici della frutta sempre con parmigiano (grassi+proteine) ✅',
+    macros: { kcalLui: '~390', kcalLei: '~280', proteine: 'medie' }
+  },
+
+  {
+    id: 'r49',
+    nome: 'Bowl fredda completa con avocado',
+    emoji: '🥑',
+    gradient: ['#65a30d', '#16a34a'],
+    momento: ['P1'],
+    persona: 'entrambi',
+    tempoMin: 10,
+    difficolta: 'facile',
+    mealPrep: true,
+    tags: ['fredda', 'estiva', 'proteico', 'senza-semi', 'no-cottura', 'veloce'],
+    descrizione: 'Piatto unico freddo da P1 ricco di proteine: avocado cremoso + una proteina compatibile (mozzarella, pollo freddo o uova sode ben cotte) + base di pane morbido o riso. Zero fornelli, bilanciato, morbido per lei e senza semi.',
+    ingredienti: [
+      { nome: 'Avocado maturo', lui: '½ frutto', lei: '½ frutto' },
+      { nome: 'Mozzarella/provola a cubetti (o pollo freddo sfilacciato)', lui: '60g o 110g pollo', lei: '50g o 90g pollo' },
+      { nome: 'Uova sode 10 min (alternativa o aggiunta proteica)', lui: 'facolt. 1–2', lei: 'facolt. 1' },
+      { nome: 'Base: pane integrale morbido SENZA semi o riso basmati freddo', lui: '2 fette / 1 porzione riso', lei: '1 fetta morbida / ¾ porzione riso' },
+      { nome: 'Limone + olio EVO + prezzemolo', lui: '½ limone + 1 cucchiaio', lei: '½ limone + 1 cucchiaio' }
+    ],
+    passaggi: [
+      'Affetta o schiaccia l\'avocado e irroralo subito di limone (non annerisce).',
+      'Componi la bowl: base di riso freddo o pane a pezzetti, avocado, mozzarella a cubetti (o pollo freddo sfilacciato); aggiungi le uova sode a spicchi se vuoi più proteine.',
+      'Condisci con olio EVO, limone e prezzemolo; sale e pepe a piacere.',
+      'Lei: pane morbido non tostato o riso ben cotto, tutto a pezzi piccoli e morbidi.'
+    ],
+    tips: 'Pensata come P1 freddo senza uova per alleggerire il consumo settimanale di uova: la proteina di base è mozzarella o pollo freddo, le uova sode sono solo un\'aggiunta facoltativa. Prepara la base (riso/pollo) la sera prima e assembla in 3 minuti aggiungendo avocado e limone al momento.',
+    sicurezzaLei: 'Tutto morbido (avocado, mozzarella/pollo sfilacciato, pane/riso) ✅ · senza semi (pane verificato) ✅ · niente pomodoro fresco ✅',
+    sicurezzaLui: 'Solo mozzarella/provola dalla lista (+ uova sode ben cotte se aggiunte) ✅ · carbo (pane/riso) sempre con proteine ✅',
+    macros: { kcalLui: '~520', kcalLei: '~410', proteine: 'alte' }
   }
 
 ];

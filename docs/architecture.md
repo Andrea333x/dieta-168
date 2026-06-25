@@ -21,13 +21,14 @@ sw.js                   service worker — costante CACHE da bumpare a ogni rele
 middleware.js           cancello password per Vercel (Edge) — alternativa a Cloudflare Access
 serve.cmd               server locale di test (doppio click → http://localhost:8080)
 css/app.css             design system (token :root + theme-light) e stili componenti
-js/app.js               cuore app: router tab, render, tracking, Diario, eventi (IIFE, 'use strict')
-js/assistant.js         tab AI (window.AssistantTab) — coach via POST /api/coach (formato OpenAI)
+js/app.js               cuore app: router tab, render, tracking, Diario, eventi (IIFE, 'use strict'); espone anche window.DietLogs.contextSummary() per l'AI proattiva (v1.4.0)
+js/assistant.js         tab AI (window.AssistantTab) — coach via POST /api/coach (formato OpenAI); buildRuntimeContext() appende lo "STATO RECENTE" da window.DietLogs (v1.4.0)
 worker.js               Worker Cloudflare: serve gli asset + proxy /api/coach → NVIDIA (key = secret NVIDIA_API_KEY)
 wrangler.jsonc          config deploy Worker (main=worker.js, binding asset ASSETS)
 .assetsignore           file NON serviti come sito (worker.js, config, *.md con dettagli clinici)
-js/data/diet.js         window.DIET_DATA — piano, porzioni, integratori, spesa, meal prep, biohacking
-js/data/recipes.js      window.RECIPES — 43 ricette con filtri
+.claude/agents/         7 subagent di progetto (nutrizionista, biohacker, recipe-finder, deep-search, frontend, ai-coach, qa) — gitignored, tooling locale (v1.4.0)
+js/data/diet.js         window.DIET_DATA — piano, porzioni, integratori, spesa, meal prep, biohacking, macroByMeal (stima macro per pasto, v1.5.0)
+js/data/recipes.js      window.RECIPES — 49 ricette con filtri
 js/data/tips.js         window.TIPS — 42 tips in 10 categorie
 icons/                  icon-180/192/512 PNG per iOS
 docs/                   deploy.md · research.md · architecture.md (questo file)
@@ -52,6 +53,9 @@ I file dati espongono globali (`DIET_DATA`, `RECIPES`, `TIPS`); `app.js` li legg
   usato da `setState` sul fallimento quota; `#update-banner` (azione `reload-app`) mostrato su `controllerchange`
   solo se esisteva già un controller (aggiornamento, non prima installazione).
 - La tab **AI** non è in `RENDERERS`: è montata da `window.AssistantTab.mount(el)` (contratto in `assistant.js`).
+- **Stima macro (v1.5.0)**: `DIET_DATA.macroByMeal[" <id>-<n> "]` → `{lui:{kcal,pro}, lei:{kcal,pro}}`. `mealCardHtml(p, interactive, dayId)` riceve l'id del giorno e mostra una `.macro-row` per pasto; `dayMacroCardHtml(dayId)`/`dayMacroTotals()` rendono la card "macro del giorno" in Oggi con confronto ai `MACRO_TARGET` (alert se LEI < floor 1.400 kcal o proteine sotto target).
+- **Mini-tab Varianti (v1.5.0)**: campo opzionale `pasto.varianti = [{emoji, nome, stagione, dettaglio}]` reso come `<details class="mini varianti">`; `currentSeason()` (estate/inverno/…) marca la variante in stagione con il badge "consigliata ora". Nessun nuovo handler: si usa il `<details>` nativo.
+- **AI proattiva (v1.4.0, FASE 6.1)**: `app.js` espone `window.DietLogs.contextSummary()` — riassunto compatto e difensivo (solo lettura, nessuna nuova chiave) degli ultimi ~7 giorni di log del Diario (aderenza pasti, streak, umore, idratazione, peso+trend, regolarità orari, ciclo lei). `assistant.js` lo appende in `buildRuntimeContext()` come blocco "STATO RECENTE" (parte dinamica, non cacheata) e il system prompt istruisce il coach a usarlo per spunti proattivi con tatto. Se non ci sono log, ritorna almeno il giorno del piano.
 
 ## 4. Gestione eventi (event delegation)
 Un solo `document.addEventListener('click', …)` con `e.target.closest('[data-*]')`. I `data-*` attivi:

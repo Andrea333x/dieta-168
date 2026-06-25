@@ -159,23 +159,24 @@ const DIET_DATA = {
       nome: 'Martedì',
       pasti: [
         {
-          n: 1, ora: '13:00', titolo: 'French Toast integrale', emoji: '🍳',
+          n: 1, ora: '13:00', titolo: 'Bowl fredda con avocado', emoji: '🥑',
           items: [
-            { alimento: 'Fette di pane integrale', lui: '2 fette', lei: '1 fetta e ½' },
-            { alimento: 'Uova nell\'impasto', lui: '2 uova intere', lei: '1 uovo + 1 albume' },
-            { alimento: 'Latte', lui: '½ tazza (100ml) intero', lei: '½ tazza (80ml) p. scremato' },
-            { alimento: 'Cannella', lui: 'q.b.', lei: 'q.b.' },
-            { alimento: 'Topping', lui: 'Miele 1 cucchiaino + 4–5 noci spezzate + 1 banana a fette', lei: 'Miele 1 cucchiaino + 1 banana a fette + 1 pesca sbucciata' }
+            { alimento: 'Avocado', lui: '½ avocado a fette o schiacciato + limone', lei: '½ avocado a fette + limone' },
+            { alimento: 'Proteina (no uova)', lui: 'Mozzarella/provola 60g + pollo freddo 110g sfilacciato', lei: 'Mozzarella 50g + pollo freddo 90g sfilacciato' },
+            { alimento: 'Base', lui: 'Pane integrale 2 fette o riso basmati freddo 1 porzione', lei: '1 fetta morbida o ¾ porzione riso ben cotto' },
+            { alimento: 'Condimento', lui: 'Olio EVO 1 cucchiaio + limone + prezzemolo', lei: 'Olio EVO 1 cucchiaio + limone + prezzemolo' },
+            { alimento: 'Frutta', lui: '—', lei: '1 banana o 1 pesca sbucciata' }
           ],
-          nota: 'Ingredienti base (entrambi usano lo stesso preparato, porzioni diverse): sbattere uova + latte + cannella in una ciotola → inzuppare le fette di pane → cuocere in padella antiaderente con ½ cucchiaino EVO.',
+          nota: '🥚➖ P1 freddo SENZA uova: è il pasto pensato per ridurre di una volta a settimana il consumo di uova. La proteina arriva da mozzarella + pollo freddo (le uova sode restano solo un\'aggiunta facoltativa). Vedi ricetta "Bowl fredda completa con avocado".',
           prep: {
-            fonte: 'fresco',
+            fonte: 'misto',
             passi: [
-              'Sbattere 2 uova + latte + cannella (2 min)',
-              'Inzuppare pane e cuocere (6 min)',
-              'Banana fresca + topping (2 min)'
+              'Pollo già cotto domenica → sfilacciare freddo dal frigo (1 min)',
+              'Avocado ½ fresco a fette/schiacciato + limone (al momento)',
+              'Mozzarella a cubetti + base pane/riso',
+              'Condire con olio EVO, limone e prezzemolo'
             ],
-            tempoMin: 10
+            tempoMin: 6
           }
         },
         {
@@ -199,27 +200,32 @@ const DIET_DATA = {
           }
         },
         {
-          n: 3, ora: '20:30', titolo: 'Pesce al forno + patate al vapore', emoji: '🍽️',
+          n: 3, ora: '20:30', titolo: 'Insalata di mare fatta in casa', emoji: '🦑',
           items: [
-            { alimento: 'Orata (filetto)', lui: '1 filetto grande (≈200g, 1 palmo abbondante)', lei: '1 filetto medio (≈160g)' },
-            { alimento: 'Patate', lui: '2 patate medie al vapore', lei: '1 patata e ½ al vapore' },
-            { alimento: 'Verdura', lui: '1 ciotola carote+zucchine al vapore', lei: '1 ciotola carote+zucchine al vapore' },
-            { alimento: 'Condimento', lui: 'Olio EVO 1 cucchiaio + limone + rosmarino', lei: 'Olio EVO 1 cucchiaio + limone' }
+            { alimento: 'Polpo + calamari', lui: '160g polpo + 120g calamari ad anelli', lei: '130g polpo + 90g calamari a pezzetti (ben teneri)' },
+            { alimento: 'Gamberi', lui: '120g', lei: '110g morbidi a pezzi piccoli' },
+            { alimento: 'Salmone (solo lei, opzionale)', lui: '— (vietato)', lei: 'facoltativo 50g lessato a fiocchi' },
+            { alimento: 'Verdura/contorno', lui: '½ costa sedano a dadini (crudo) + insalata', lei: 'Patata lessa morbida a parte (carbo) + zucchine al vapore' },
+            { alimento: 'Condimento', lui: 'Olio EVO 1 cucchiaio + limone + prezzemolo + aglio', lei: 'Olio EVO 1 cucchiaio + limone + prezzemolo' }
           ],
-          nota: '♻️ Anti-spreco: cucinare il pesce per entrambi nella stessa teglia, separati. Usare la stessa acqua del vapore per patate e verdure.',
+          nota: '🦑 Niente salmone per LUI (vietato): la sua insalata è polpo/calamari/gamberi. Per LEI molluschi cotti a lungo (~40 min) finché teneri — parodontite, niente gommoso/croccante; il salmone a fiocchi è consentito solo a lei. L\'omega-3 della settimana arriva dallo sgombro del venerdì + integratore Omega-3 di pranzo. Vedi ricetta "Insalata di mare fatta in casa".',
           prep: {
             fonte: 'misto',
             passi: [
-              'Orata filetto prep\'d (martedì → lo cuoci fresco al forno 12 min con limone)',
-              'Patate già cotte al vapore domenica (3 min riscaldare)',
-              'Carote/zucchine prep\'d (1 min riscaldare)',
-              'Il pesce è l\'unico piatto che cucini fresco per qualità'
+              'Polpo e calamari prep\'d domenica (brasati a lungo, teneri) → conditi freddi',
+              'Gamberi 2–3 min finché rosa e morbidi',
+              'Condire tiepido con olio EVO, limone, prezzemolo, aglio → 30 min in frigo',
+              'Per lei: patata lessa morbida a parte come quota di carboidrati'
             ],
-            tempoMin: 18
-          }
+            tempoMin: 15
+          },
+          varianti: [
+            { emoji: '❄️', nome: 'Inverno: sgombro/orata al forno + verdure', stagione: 'inverno', dettaglio: 'Piatto caldo al posto dell\'insalata fredda; stesso omega-3, niente patate per lei.' },
+            { emoji: '🦐', nome: 'Solo gamberi + polpo', stagione: 'sempre', dettaglio: 'Se i calamari risultano gommosi per lei, usa più gamberi (più teneri).' }
+          ]
         }
       ],
-      tempoTotaleMin: 40
+      tempoTotaleMin: 33
     },
 
     // ===== MERCOLEDÌ =====
@@ -271,20 +277,20 @@ const DIET_DATA = {
           }
         },
         {
-          n: 3, ora: '20:30', titolo: 'Pollo in umido + riso basmati', emoji: '🍽️',
+          n: 3, ora: '20:30', titolo: 'Pollo con verdure miste in umido', emoji: '🍗',
           items: [
-            { alimento: 'Pollo', lui: '1 coscia disossata (≈180g)', lei: '1 petto piccolo (≈140g) in umido morbido' },
-            { alimento: 'Riso basmati', lui: '1 pugno (≈90g crudo)', lei: '¾ pugno (≈65g crudo)' },
-            { alimento: 'Sugo umido', lui: '2 mestoli', lei: '2 mestoli passati (più lisci per lei)' },
+            { alimento: 'Pollo', lui: '1 coscia disossata (≈180g)', lei: '1 sovracoscia (≈140g) in umido morbido che si sfalda' },
+            { alimento: 'Verdure miste', lui: 'Zucchine + carote + peperoni stufati', lei: 'Zucchine + carote + peperoni sbucciati, ben cotti morbidi' },
+            { alimento: 'Sugo umido', lui: '2 mestoli (brodo di pollo + poco passato)', lei: '2 mestoli passati (più lisci per lei)' },
             { alimento: 'Finocchi', lui: '1 ciotola al vapore', lei: '1 ciotola al vapore' },
-            { alimento: 'Olio EVO', lui: 'nel tegame comune', lei: 'nel tegame comune' }
+            { alimento: 'Olio EVO + curcuma + pepe', lui: 'nel tegame comune', lei: 'nel tegame comune' }
           ],
-          nota: 'Cuocere il pollo in umido per entrambi nello stesso tegame (stessa preparazione, porzioni diverse): pomodoro passato + cipolla + carota + sedano + poco olio EVO → sobbollire 35 min.',
+          nota: '🍗 Niente riso qui: il riso ora è solo 1 volta a settimana (risotto della domenica), come la pasta. Pollo in umido con verdure miste, stesso tegame; per lei la sovracoscia resta più morbida del petto (parodontite). Vedi ricetta "Pollo con verdure miste in umido".',
           prep: {
             fonte: 'prepd',
             passi: [
-              'Pollo cosce prep\'d + sugo umido prep\'d → scaldare 3 min microonde',
-              'Riso basmati prep\'d → scaldare 2 min microonde',
+              'Pollo prep\'d + sugo umido prep\'d → scaldare 3 min microonde',
+              'Verdure miste prep\'d (zucchine/carote/peperoni) → scaldare 2 min',
               'Finocchi al vapore prep\'d → scaldare 1 min'
             ],
             tempoMin: 7
@@ -321,45 +327,56 @@ const DIET_DATA = {
           }
         },
         {
-          n: 2, ora: '17:00', titolo: 'Frutta + formaggio', emoji: '🥗',
+          n: 2, ora: '17:00', titolo: 'Smoothie di frutta + scaglie', emoji: '🥤',
           items: [
-            { alimento: 'Formaggio', lui: 'Parmigiano 2 dita spesse a scaglie (≈30g)', lei: 'Provola 2 fette (≈50g)' },
-            { alimento: 'Frutta', lui: '1 banana + 1 pesca', lei: '1 banana + 1 pera sbucciata morbida' },
-            { alimento: 'Pane', lui: '1 fetta integrale', lei: '1 fetta morbida' }
+            { alimento: 'Frutta (lista consentita)', lui: '1 banana + ½ mango', lei: '½ banana + ½ mango' },
+            { alimento: 'Latte', lui: '200ml intero', lei: '180ml p. scremato' },
+            { alimento: 'Parmigiano a scaglie (a parte)', lui: '30g', lei: '20g' },
+            { alimento: 'Ghiaccio + cannella', lui: 'q.b.', lei: 'q.b.' }
           ],
-          nota: '',
+          nota: '🥤 Smoothie 1 di 2 a settimana. Solo frutta della lista di lei (banana/mango/pesca/melone/pera), niente semi → niente frutti di bosco/kiwi. Base latte (NO yogurt per lui, NO bevanda di soia per lei). Le scaglie di parmigiano a parte frenano il picco glicemico. Vedi ricetta "Smoothie di frutta consentita con scaglie".',
           prep: {
             fonte: 'fresco',
             passi: [
-              'Formaggio direttamente dal frigo',
-              'Frutta fresca (banana + pesca/pera)',
-              'Pane'
+              'Frullare frutta + latte + ghiaccio (1 min)',
+              'Versare nel bicchiere',
+              'Parmigiano a scaglie a parte'
             ],
-            tempoMin: 2
-          }
+            tempoMin: 3
+          },
+          varianti: [
+            { emoji: '🥭', nome: 'Banana + mango', stagione: 'estate', dettaglio: 'Classica estiva, cremosa.' },
+            { emoji: '🍑', nome: 'Banana + pesca sbucciata', stagione: 'estate', dettaglio: 'Dolce e digeribile, snocciolata.' },
+            { emoji: '🍈', nome: '½ melone + banana', stagione: 'estate', dettaglio: 'Dissetante e leggera.' },
+            { emoji: '🍐', nome: 'Inverno: banana + pera cotta', stagione: 'inverno', dettaglio: 'Più avvolgente, pera sbucciata e cotta.' }
+          ]
         },
         {
-          n: 3, ora: '20:30', titolo: 'Crema di lenticchie rosse', emoji: '🍽️',
+          n: 3, ora: '20:30', titolo: 'Seitan con verdure miste', emoji: '🍢',
           items: [
-            { alimento: 'Lenticchie rosse secche', lui: '1 pugno (≈80g)', lei: '¾ pugno (≈65g)' },
-            { alimento: 'Acqua/brodo', lui: '3 volte il volume', lei: '3 volte il volume' },
+            { alimento: 'Seitan', lui: '150g a bocconcini', lei: '130g a fettine' },
+            { alimento: 'Verdure miste', lui: 'Zucchine + carote + peperoni stufati', lei: 'Zucchine + carote + peperoni sbucciati, ben cotti morbidi' },
+            { alimento: 'Legumi (completa la lisina)', lui: '1 cucchiaio ceci/lenticchie ben cotti', lei: '1 cucchiaio ceci/lenticchie ben cotti' },
             { alimento: 'Condimento', lui: 'Olio EVO 1 cucchiaio + rosmarino + curcuma + pepe', lei: 'Olio EVO 1 cucchiaio + curcuma + pepe nero (attiva curcumina ×20)' },
-            { alimento: 'Pane', lui: '2 fette tostate per fare "crostoni"', lei: '1 fetta morbida spezzata' },
-            { alimento: 'Spinaci', lui: '1 ciotola saltati in padella', lei: '1 ciotola al vapore' }
+            { alimento: 'Pane', lui: '2 fette tostate', lei: '1 fetta morbida spezzata' }
           ],
-          nota: 'Le lenticchie rosse decorticate NON hanno bisogno di ammollo e si disfano naturalmente in crema — stesso tegame per entrambi. 🔬 Biohack curcuma + pepe nero: la piperina del pepe aumenta la biodisponibilità della curcumina del 2000%. Effetto anti-infiammatorio clinicamente rilevante per lei (tiroide) e lui (neuroinfiammazione ADHD).',
+          nota: '🍢 D\'estate niente crema di lenticchie: al suo posto seitan (glutine di frumento, NON soia → ok anche per lei) con verdure miste morbide. Un cucchiaio di legumi completa gli amminoacidi (il seitan è povero di lisina). 🔬 Curcuma + pepe nero: la piperina aumenta la biodisponibilità della curcumina (anti-infiammatorio per tiroide lei e ADHD lui). In inverno si può riproporre la crema di lenticchie. Vedi ricetta "Seitan con verdure miste in padella".',
           prep: {
             fonte: 'prepd',
             passi: [
-              'Lenticchie prep\'d + curcuma + pepe nero → scaldare 2 min',
-              'Spinaci al vapore prep\'d lei → scaldare 1 min (lui salta in padella ricaldo)',
+              'Seitan prep\'d → dorare in padella 3 min',
+              'Verdure miste prep\'d + legumi → scaldare 2 min con curcuma e pepe',
               'Pane fresco (lui tostato, lei morbido)'
             ],
-            tempoMin: 5
-          }
+            tempoMin: 7
+          },
+          varianti: [
+            { emoji: '🍱', nome: 'Tempeh con verdure (solo lui)', stagione: 'sempre', dettaglio: 'Per lui il tempeh al posto del seitan (più proteine); per lei resta il seitan (no soia). Ricetta r46.' },
+            { emoji: '❄️', nome: 'Inverno: crema di lenticchie rosse', stagione: 'inverno', dettaglio: 'Piatto caldo invernale con curcuma + pepe nero (anti-infiammatorio). Lenticchie decorticate, no ammollo.' }
+          ]
         }
       ],
-      tempoTotaleMin: 19
+      tempoTotaleMin: 22
     },
 
     // ===== VENERDÌ =====
@@ -408,23 +425,27 @@ const DIET_DATA = {
           }
         },
         {
-          n: 3, ora: '20:30', titolo: 'Sgombro al forno + purè', emoji: '🍽️',
+          n: 3, ora: '20:30', titolo: 'Sgombro al forno + verdure', emoji: '🐟',
           items: [
-            { alimento: 'Sgombro', lui: '1 filetto grande (≈180g) o 2 piccoli', lei: '1 filetto medio (≈140g)' },
-            { alimento: 'Purè', lui: '2 patate medie schiacciate con olio EVO + latte', lei: '1 patata e ½ con latte p.s. + olio EVO' },
+            { alimento: 'Sgombro (o orata/merluzzo)', lui: '1 filetto grande (≈180g)', lei: '1 filetto medio (≈140g)' },
+            { alimento: 'Verdure miste', lui: 'Zucchine + carote + finocchi al forno', lei: 'Zucchine + carote + finocchi ben cotti morbidi' },
             { alimento: 'Broccoli', lui: '1 ciotola ben cotti al vapore (non crudi!)', lei: '1 ciotola ben cotti, morbidi' },
-            { alimento: 'Condimento', lui: 'Olio EVO 1 cucchiaio + limone + aglio', lei: 'Olio EVO 1 cucchiaio + limone' }
+            { alimento: 'Condimento', lui: 'Olio EVO 1 cucchiaio + limone + aglio + rosmarino', lei: 'Olio EVO 1 cucchiaio + limone' }
           ],
-          nota: 'Stessa teglia per entrambi — lo sgombro fresco o surgelato di qualità ha più omega-3 del salmone.',
+          nota: '🐟 Pesce grasso = OMEGA-3 della settimana (lo sgombro ne ha più del salmone; alternative: orata, merluzzo, nasello). NIENTE patate: il contorno sono verdure. Stessa teglia per entrambi; lo sgombro surgelato di qualità non spreca mai. Per alternare con un giorno veg vedi le 🔄 varianti (tempeh lui / seitan lei).',
           prep: {
             fonte: 'misto',
             passi: [
-              'Sgombro cuocere fresco al forno con limone (12 min)',
-              'Patate prep\'d + latte + olio → schiacciare/mescolare (3 min)',
-              'Broccoli prep\'d → riscaldare (1 min)'
+              'Sgombro fresco al forno con limone (12 min) o scongelato dal freezer',
+              'Verdure miste prep\'d → al forno col pesce o scaldate (3 min)',
+              'Broccoli prep\'d ben cotti → riscaldare (1 min)'
             ],
             tempoMin: 18
-          }
+          },
+          varianti: [
+            { emoji: '🍱', nome: 'Tempeh (lui) / Seitan (lei) con verdure', stagione: 'sempre', dettaglio: 'Giorno proteico-vegetale per alternare il pesce. Tempeh per lui, SEITAN per lei (no soia). Ricetta r46.' },
+            { emoji: '🐠', nome: 'Orata o merluzzo al forno', stagione: 'sempre', dettaglio: 'Stessa preparazione dello sgombro, pesce più delicato.' }
+          ]
         }
       ],
       tempoTotaleMin: 42
@@ -457,24 +478,29 @@ const DIET_DATA = {
           }
         },
         {
-          n: 2, ora: '17:00', titolo: 'Farro con verdure e formaggio', emoji: '🥗',
+          n: 2, ora: '17:00', titolo: 'Smoothie di frutta + scaglie', emoji: '🥤',
           items: [
-            { alimento: 'Farro perlato secco', lui: '1 pugno (≈80g)', lei: '¾ pugno (≈60g)' },
-            { alimento: 'Verdure', lui: '1 zucchina + 1 carota grigliate/a vapore', lei: '1 zucchina + 1 carota al vapore (morbide)' },
-            { alimento: 'Formaggio', lui: 'Scamorza 2 fette a cubetti (≈50g)', lei: 'Mozzarella ½ pallina a pezzi (≈60g)' },
-            { alimento: 'Condimento', lui: 'Olio EVO 1 cucchiaio + erbe', lei: 'Olio EVO 1 cucchiaio + erbe' }
+            { alimento: 'Frutta (lista consentita)', lui: '1 banana + ½ pesca sbucciata', lei: '½ banana + ½ pesca sbucciata' },
+            { alimento: 'Latte', lui: '200ml intero', lei: '180ml p. scremato' },
+            { alimento: 'Parmigiano a scaglie (a parte)', lui: '30g', lei: '20g' },
+            { alimento: 'Ghiaccio + cannella', lui: 'q.b.', lei: 'q.b.' }
           ],
-          nota: 'Cuocere il farro in abbondante acqua per entrambi — stessa pentola.',
+          nota: '🥤 Smoothie 2 di 2 a settimana (variante con pesca/melone). Solo frutta della lista di lei, niente semi. Base latte: NO yogurt (lui), NO bevanda di soia (lei). P2 leggero e veloce, comodo nel sabato della pizza serale. Vedi ricetta "Smoothie di frutta consentita con scaglie".',
           prep: {
-            fonte: 'misto',
+            fonte: 'fresco',
             passi: [
-              'Cuocere farro 80g lui / 60g lei in acqua (40 min — fai un batch per entrambi)',
-              'Zucchine + carote prep\'d dal frigo',
-              'Formaggio fresco',
-              'Puoi farla mentre fai altro, non attiva'
+              'Frullare frutta + latte + ghiaccio (1 min)',
+              'Versare nel bicchiere',
+              'Parmigiano a scaglie a parte'
             ],
-            tempoMin: 45
-          }
+            tempoMin: 3
+          },
+          varianti: [
+            { emoji: '🍑', nome: 'Banana + pesca sbucciata', stagione: 'estate', dettaglio: 'Dolce e digeribile, snocciolata.' },
+            { emoji: '🍈', nome: '½ melone + banana', stagione: 'estate', dettaglio: 'Dissetante e leggera.' },
+            { emoji: '🥭', nome: 'Banana + mango', stagione: 'estate', dettaglio: 'Classica estiva, cremosa.' },
+            { emoji: '🍐', nome: 'Inverno: banana + pera cotta', stagione: 'inverno', dettaglio: 'Più avvolgente, pera sbucciata e cotta.' }
+          ]
         },
         {
           n: 3, ora: '20:30', titolo: 'PIZZA FATTA IN CASA', emoji: '🍽️',
@@ -499,7 +525,7 @@ const DIET_DATA = {
           }
         }
       ],
-      tempoTotaleMin: 76
+      tempoTotaleMin: 34
     },
 
     // ===== DOMENICA =====
@@ -572,7 +598,7 @@ const DIET_DATA = {
       'Frutta con semi: fragole, kiwi, lamponi, more, fichi, melograno, uva con semi',
       'Cibi duri: grissini, taralli, crackers secchi, mandorle intere crude',
       'Brassicacee crude (ok solo ben cotte)',
-      'Soia in eccesso',
+      'Soia: tempeh, tofu, edamame, salsa di soia, latte di soia (interferisce con la levotiroxina) → usare seitan al posto del tempeh',
       'Succhi industriali zuccherati'
     ]
   },
@@ -595,7 +621,7 @@ const DIET_DATA = {
     { emoji: '🥦', titolo: 'Verdure', testo: 'Zucchine e carote comprate in sacchetto grande (1kg), usate su più giorni' },
     { emoji: '🍌', titolo: 'Banane a mazzo', testo: 'Da 6–7: mature al punto giusto ogni giorno' },
     { emoji: '🧀', titolo: 'Scamorza/provola', testo: 'Compra 1 pezzo intero, si conserva bene in frigo per tutta la settimana' },
-    { emoji: '🐟', titolo: 'Pesce', testo: 'Sgombro e orata/merluzzo comprati lo stesso giorno (venerdì mercato fresco o surgelato in qualità) → cucinati martedì e venerdì · il surgelato non spreca mai' },
+    { emoji: '🦑', titolo: 'Frutti di mare + sgombro', testo: 'Misto mare (polpo, calamari, gamberi) per l\'insalata di mare del martedì e sgombro per il venerdì (omega-3): fresco o surgelato di qualità. Il surgelato non spreca mai e rende il polpo più tenero. Niente salmone per lui (vietato): opzionale solo per lei.' },
     { emoji: '🍅', titolo: 'Pomodori per lei', testo: 'Alternative senza semi (vedi sezione dedicata)' }
   ],
 
@@ -606,10 +632,10 @@ const DIET_DATA = {
       categoria: '🥚 Proteine animali',
       items: [
         { prodotto: 'Uova fresche', quantita: '28–30 uova (2 cartoni da 15 o 1 da 30)', note: 'Ogni giorno, base del piano' },
-        { prodotto: 'Pollo intero (o pezzi misti)', quantita: '1 pollo intero ~1,5kg oppure 800g petto + 4 cosce', note: 'Lun (petto), Mer (cosce), Dom (avanzo risotto) + carcassa per brodo' },
-        { prodotto: 'Orata o branzino (filetti)', quantita: '2 filetti grandi (~400g totali)', note: 'Martedì' },
-        { prodotto: 'Merluzzo o nasello (filetti)', quantita: '2 filetti medi (~350g totali)', note: 'Martedì alternativa' },
-        { prodotto: 'Sgombro (fresco o surgelato qualità)', quantita: '2 filetti (~350g totali)', note: 'Venerdì' },
+        { prodotto: 'Pollo intero (o pezzi misti)', quantita: '1 pollo intero ~1,5kg + 1 sovracoscia extra per lei', note: 'Lun (petto), Mar bowl freddo P1 (petto), Mer (pollo+verdure, sovracoscia lei), Dom (avanzo risotto) + carcassa per brodo' },
+        { prodotto: 'Misto mare (polpo, calamari, gamberi)', quantita: '~550g totali (anche surgelato di qualità)', note: 'Martedì — insalata di mare (niente cozze)' },
+        { prodotto: 'Sgombro (fresco o surgelato qualità)', quantita: '2 filetti (~350g totali)', note: 'Venerdì — omega-3 della settimana (alt: orata/merluzzo)' },
+        { prodotto: 'Salmone (piccola porzione, SOLO lei)', quantita: '100g (opzionale)', note: 'Solo lei nell\'insalata di mare — VIETATO a lui' },
         { prodotto: 'Coniglio (facoltativo domenica)', quantita: '300g già pulito', note: 'Domenica (alternativa al pollo)' }
       ]
     },
@@ -630,8 +656,8 @@ const DIET_DATA = {
         { prodotto: 'Spinaci freschi (busta)', quantita: '500g', note: 'Lun p1, Gio p3' },
         { prodotto: 'Zucchine', quantita: '1,2kg (≈6 zucchine medie)', note: 'Lun, Mer, Ven, Sab' },
         { prodotto: 'Carote', quantita: '700g (≈6–7 carote)', note: 'Mar, Mer, Gio, Sab' },
-        { prodotto: 'Patate', quantita: '1,5kg', note: 'Mar + Ven (vapore e purè)' },
-        { prodotto: 'Peperoni (rossi/gialli)', quantita: '3 pezzi', note: 'Mer frittata + alternativa pomodoro lei' },
+        { prodotto: 'Patate', quantita: '500g', note: 'Solo lei: patata lessa morbida a parte nell\'insalata di mare (martedì)' },
+        { prodotto: 'Peperoni (rossi/gialli)', quantita: '6 pezzi', note: 'Mer frittata + seitan/tempeh/pollo con verdure (Mer/Gio/Ven) + alternativa pomodoro lei' },
         { prodotto: 'Finocchi', quantita: '2 bulbi', note: 'Mer p3' },
         { prodotto: 'Broccoli', quantita: '1 cespo medio (~500g)', note: 'Ven p3' },
         { prodotto: 'Cipolla', quantita: '3–4 cipolle', note: 'Soffritti e umidi' },
@@ -645,13 +671,13 @@ const DIET_DATA = {
       categoria: '🍌 Frutta',
       items: [
         { prodotto: 'Banane', quantita: '2 mazzi da 6 (~12 banane)', note: 'Ogni giorno per entrambi' },
-        { prodotto: 'Pesche o nettarine', quantita: '6', note: 'Sbucciare sempre per lei' },
-        { prodotto: 'Melone', quantita: '1 intero', note: 'Mer + Ven lei' },
-        { prodotto: 'Mango', quantita: '2 maturi', note: 'Gio + Dom lei' },
+        { prodotto: 'Pesche o nettarine', quantita: '8', note: 'Sbucciare sempre per lei + smoothie sabato' },
+        { prodotto: 'Melone', quantita: '1 intero', note: 'Mer + Ven lei + variante smoothie' },
+        { prodotto: 'Mango', quantita: '3 maturi', note: 'Gio smoothie + Dom lei + bowl' },
         { prodotto: 'Albicocche', quantita: '8–10', note: 'Mar + Gio lei' },
-        { prodotto: 'Pere', quantita: '4 (morbide, tipo Abate)', note: 'Gio + Sab + Dom lei' },
-        { prodotto: 'Avocado', quantita: '4 (comprarne 2 maturi + 2 da maturare)', note: 'Lun, Gio, Ven' },
-        { prodotto: 'Limoni', quantita: '6', note: 'Pesce, condimenti, risciacquo lei' }
+        { prodotto: 'Pere', quantita: '4 (morbide, tipo Abate)', note: 'Gio + Dom lei + variante smoothie' },
+        { prodotto: 'Avocado', quantita: '6 (3 maturi + 3 da maturare)', note: 'Lun p1, Mar bowl P1, Gio p1' },
+        { prodotto: 'Limoni', quantita: '6', note: 'Insalata di mare, condimenti, bowl avocado, risciacquo lei' }
       ]
     },
     {
@@ -659,10 +685,12 @@ const DIET_DATA = {
       items: [
         { prodotto: 'Pane integrale morbido senza semi', quantita: '2 filoni (o 1 filone + 1 confezione affettato)', note: 'Ogni giorno — verificare etichetta: ZERO semi' },
         { prodotto: 'Pasta integrale', quantita: '500g', note: 'Lunedì' },
-        { prodotto: 'Riso basmati', quantita: '500g', note: 'Mercoledì' },
-        { prodotto: 'Riso Carnaroli/Arborio', quantita: '500g', note: 'Domenica risotto' },
-        { prodotto: 'Farro perlato', quantita: '400g', note: 'Sabato' },
-        { prodotto: 'Lenticchie rosse decorticate', quantita: '400g', note: 'Giovedì (no ammollo!)' },
+        { prodotto: 'Riso basmati', quantita: '250g', note: 'Opzionale: base fredda della bowl avocado (martedì P1)' },
+        { prodotto: 'Riso Carnaroli/Arborio', quantita: '500g', note: 'Domenica risotto (unico riso della settimana, come la pasta)' },
+        { prodotto: 'Seitan (glutine di frumento)', quantita: '~300g', note: 'Gio (entrambi) + variante veg del venerdì (lei)' },
+        { prodotto: 'Tempeh (SOLO lui, variante)', quantita: '150g facoltativo', note: 'Variante veg per lui (Gio/Ven) — VIETATO a lei (soia ↔ levotiroxina)' },
+        { prodotto: 'Ceci/lenticchie cotti (barattolo)', quantita: '1 barattolo', note: 'Piccola quota per completare la lisina del seitan' },
+        { prodotto: 'Lenticchie rosse decorticate', quantita: '250g', note: 'Inverno (crema) — d\'estate sostituite dal seitan' },
         { prodotto: 'Farina integrale', quantita: '500g', note: 'Pancakes + pizza' },
         { prodotto: 'Farina tipo 0', quantita: '300g', note: 'Pizza (morbidezza impasto)' },
         { prodotto: 'Lievito di birra secco', quantita: '2 bustine', note: 'Pizza sab + pancakes ven' },
@@ -688,8 +716,8 @@ const DIET_DATA = {
       'Spinaci 500g',
       'Zucchine 1,2kg',
       'Carote 700g',
-      'Patate 1,5kg',
-      'Peperoni 3 pezzi',
+      'Patate 500g (solo lei, insalata di mare)',
+      'Peperoni 6 pezzi',
       'Finocchi 2 bulbi',
       'Broccoli 1 cespo',
       'Cipolla 4 pezzi',
@@ -698,18 +726,19 @@ const DIET_DATA = {
       'Funghi 300g (surgelati ok)',
       'Zucca surgelata 400g',
       // Proteine FRESCHE (compra stesso giorno)
-      'Pollo intero 1,5kg (migliore qualità, non confezionato da giorni)',
-      'Sgombro 2 filetti 350g',
-      'Orata/merluzzo 400g',
+      'Pollo intero 1,5kg + 1 sovracoscia (migliore qualità, non confezionato da giorni)',
+      'Misto mare 550g (polpo, calamari, gamberi — anche surgelato di qualità)',
+      'Sgombro 2 filetti 350g (venerdì — omega-3)',
+      'Salmone 100g (solo lei, opzionale)',
       // Latticini (compra settimana — durano)
       'Mozzarella 5 palline (latticini: durano la settimana)',
       'Scamorza/provola pezzo intero (latticini: durano la settimana)',
       'Parmigiano 200g (latticini: durano la settimana)'
     ],
     perGiorno: [
-      'Lunedì: Avocado 1 (fresco da mangiare lun), preparane 3 altri domenica come backup',
-      'Martedì: Orata/merluzzo 400g FRESCA',
-      'Venerdì: Sgombro già prep\'d o leggermente freddo da forno',
+      'Lunedì: Avocado maturo (serve Lun, Mar bowl, Gio) — scala la maturazione 3+3',
+      'Martedì: Misto mare FRESCO (o surgelato scongelato) per l\'insalata di mare',
+      'Venerdì: Sgombro fresco o surgelato (omega-3) — alt orata/merluzzo',
       'Uova: compra il martedì/mercoledì se domenica non è freschissimo (durano 3 settimane comunque)'
     ],
     fissa2_3settimane: [
@@ -815,17 +844,17 @@ const DIET_DATA = {
     batches: [
       {
         n: 1, nome: 'Proteine grigliate',
-        dettaglio: '1 pollo intero (~1,5kg) → disossare e dividere: petto (400g) → diviso: 150g lui lun p3 + 150g lei mer p3 · cosce (600g) → 180g lui mer p3 + 150g lei mer p3 · carcassa → BRODO. Sgombro 2 filetti (350g) → 180g lui ven p3 + 140g lei ven p3.',
+        dettaglio: '1 pollo intero (~1,5kg) + 1 sovracoscia → disossare e dividere: petto → Lun p3 + Mar bowl P1 (freddo, sfilacciato) · cosce/sovracoscia → Mer p3 pollo+verdure (la sovracoscia, più morbida, va a lei) · carcassa → BRODO. Misto mare: polpo+calamari (~250g) brasati a lungo finché teneri per l\'insalata di mare di martedì; i gamberi si cuociono freschi al momento. Sgombro 2 filetti → cena di venerdì (omega-3), cotto fresco al forno.',
         conservazione: 'Frigo 3 giorni max. Congelare se avanzi.'
       },
       {
-        n: 2, nome: 'Riso basmati',
-        dettaglio: 'Riso basmati secco: 360g (cotto ≈ 1kg) → diviso in 5 porzioni uguali. Mercoledì p3: 90g lui + 65g lei (già pesato). Giovedì (se manca): avanzo. Freschezza: cotto domenica sera, usare entro mercoledì sera. Tip anti-spreco: se avanzi riso, usarlo mercoledì p2 "fried rice veloce" (saltare in padella con uova fresche).',
-        conservazione: 'Cotto domenica sera, usare entro mercoledì sera.'
+        n: 2, nome: 'Proteine vegetali + base bowl',
+        dettaglio: 'Seitan ~400g (Gio entrambi + Ven lei) e tempeh 150g (Ven SOLO lui): si conservano in frigo, vanno solo dorati al momento. Cuoci anche poco riso basmati (~150g) e tieni 2–3 uova sode pronte come base/aggiunta della bowl avocado fredda di martedì.',
+        conservazione: 'Seitan/tempeh 4–5 giorni in frigo; riso cotto entro 3 giorni; uova sode 3 giorni.'
       },
       {
-        n: 3, nome: 'Lenticchie rosse',
-        dettaglio: 'Lenticchie rosse secche: 145g (cotto ≈ 350g). Giovedì p3: 80g lui + 65g lei (già pesato + curcuma/pepe).',
+        n: 3, nome: 'Legumi per il seitan',
+        dettaglio: 'Un barattolo di ceci/lenticchie cotti pronto: un cucchiaio nel piatto di seitan (Gio/Ven lei) completa la lisina. D\'inverno qui torna la crema di lenticchie rosse (145g secche → curcuma + pepe nero).',
         conservazione: 'Frigo 4 giorni, freezer 1 mese.'
       },
       {
@@ -835,7 +864,7 @@ const DIET_DATA = {
       },
       {
         n: 5, nome: 'Sugo umido pomodoro',
-        dettaglio: 'Passata di pomodoro: 300ml · cipolla piccola + sedano + aglio → soffritto · simmerato 20 min. Porzioni: mercoledì p3 (pollo umido): 150ml lui + 150ml lei · giovedì p3 (lenticchie): 80ml lui + 80ml lei.',
+        dettaglio: 'Passata di pomodoro: 300ml · cipolla piccola + sedano + aglio → soffritto · simmerato 20 min. Porzioni: mercoledì p3 (pollo+verdure in umido): 150ml lui + 150ml lei. Avanzo: scorta per altri umidi della settimana.',
         conservazione: 'Frigo 5 giorni, freezer 2 mesi.'
       },
       {
@@ -845,7 +874,7 @@ const DIET_DATA = {
       },
       {
         n: 7, nome: 'Spinaci saltati',
-        dettaglio: 'Spinaci freschi 500g → salare leggermente, scolare liquido · saltare 2 min in olio EVO + aglio. Divisione: lunedì p1: 2 porzioni (una ciascuno) · giovedì p3 lui: 1 porzione · giovedì p3 lei (vapore): 1 porzione.',
+        dettaglio: 'Spinaci freschi 500g → salare leggermente, scolare liquido · saltare 2 min in olio EVO + aglio. Divisione: lunedì p1: 2 porzioni (una ciascuno). Scorta di verde per contorni e per il seitan/pollo della settimana.',
         conservazione: 'Frigo 3 giorni max.'
       },
       {
@@ -885,10 +914,10 @@ const DIET_DATA = {
 
     hacks: [
       { titolo: 'Double batch involontario', testo: 'Quando cuoci il pollo per lunedì/mercoledì, puoi cuocerne il 30% in più → congelato per emergenze/appetito extra' },
-      { titolo: 'Riso fried rice rescue', testo: 'Se avanzi riso dal mercoledì, giovedì p2 → saltalo in padella con 2 uova fresche + curcuma e pepe nero o un goccio di brodo (5 min) = pasto ad hoc salvavita. ⚠️ Niente salsa di soia: la soia è vietata per lei (interferisce con la levotiroxina)' },
+      { titolo: 'Smoothie svuota-frutta', testo: 'Banana/mango/pesca troppo maturi? Congelali a pezzi e usali per gli smoothie (Gio e Sab p2): più cremosi e zero sprechi. Solo frutta della lista di lei — niente frutti di bosco/kiwi (semi). ⚠️ Base latte: niente yogurt (lui) né bevande di soia (lei).' },
       { titolo: 'Congelamento strategico di pane', testo: 'Compra pane intero, congela le fette subito → escono dal freezer già parzialmente scongelate e perfette per tostare senza bruciare' },
       { titolo: 'Brodo di scarto', testo: 'Non buttare mai: carota, sedano, cipolla avanzati → sacchetto freezer "scarti brodo" → domenica aggiungi carcassa pollo e fai brodo gratis' },
-      { titolo: 'Pesce surgelato = batch cook', testo: 'Sgombro e orata SURGELATI di qualità costano meno e non vanno a male se non li cuoci. Tira fuori dal freezer martedì sera, cuoce fresco mercoledì' },
+      { titolo: 'Misto mare surgelato = più tenero', testo: 'Polpo e calamari surgelati di qualità costano meno, vengono più TENERI del fresco (il freddo rompe le fibre) e non vanno a male: tienili in freezer e brasali a lungo per l\'insalata di mare. Gamberi e sgombro surgelati si cuociono in pochi minuti e l\'omega-3 si conserva.' },
       { titolo: 'Giorno "pulisci frigo"', testo: 'Giovedì p2 o p3 = "pulisci frigo" con gli avanzi prep\'d. Se ci sono resti, li mescoli (es. zucchine + carote + formaggio = mini insalatona)' },
       { titolo: 'Etichette intelligenti', testo: 'Usa etichette adesive colorate: 🔵 blu = contenitore LUI · 🔴 rosso = contenitore LEI · 🟡 giallo = in comune. Zero confusione, velocissimo riconoscimento.' }
     ],
@@ -946,13 +975,13 @@ const DIET_DATA = {
 
     tempoGiorni: [
       { giorno: 'Lunedì', minuti: 26, tipo: 'Veloce' },
-      { giorno: 'Martedì', minuti: 40, tipo: 'Medio' },
+      { giorno: 'Martedì', minuti: 33, tipo: 'Veloce' },
       { giorno: 'Mercoledì', minuti: 12, tipo: 'Velocissimo' },
-      { giorno: 'Giovedì', minuti: 19, tipo: 'Veloce' },
+      { giorno: 'Giovedì', minuti: 22, tipo: 'Veloce' },
       { giorno: 'Venerdì', minuti: 42, tipo: 'Medio' },
-      { giorno: 'Sabato', minuti: 76, tipo: 'Lungo ma sparso' },
+      { giorno: 'Sabato', minuti: 34, tipo: 'Medio' },
       { giorno: 'Domenica', minuti: 180, tipo: 'Batch cooking concentrato' },
-      { giorno: 'TOTALE/SETTIMANA', minuti: 395, tipo: '6h 35 min (comprese le 3h concentrate di prep)' }
+      { giorno: 'TOTALE/SETTIMANA', minuti: 349, tipo: '5h 49 min (comprese le 3h concentrate di prep)' }
     ],
     tempoNota: '💡 Senza meal prep: ~1 ora al giorno × 7 giorni = 7 ore. Con meal prep: 6h35. Vantaggio: meno stress durante la settimana, pasti sempre pronti, zero improvvisazione.',
 
@@ -971,6 +1000,35 @@ const DIET_DATA = {
     { colore: '🔴', significato: 'contenitore LEI' },
     { colore: '🟡', significato: 'in comune' }
   ],
+
+  // ---------- STIMA MACRO PER PASTO (v1.5.0) ----------
+  // Stima kcal + proteine (g) per pasto, per persona. Chiave "<idGiorno>-<n>".
+  // Valori indicativi dalle porzioni del piano (CREA/USDA), non pesati al grammo.
+  // Totali giornalieri verificati nei range: LUI ~1900–2100 kcal/130–150g · LEI ~1450–1600/100–120g (mai <1400).
+  // Usati da app.js (riga macro per pasto + card "macro del giorno") e dall'AI proattiva (DietLogs).
+  macroByMeal: {
+    'lun-1': { lui: { kcal: 760, pro: 38 }, lei: { kcal: 570, pro: 26 } },
+    'lun-2': { lui: { kcal: 640, pro: 31 }, lei: { kcal: 470, pro: 24 } },
+    'lun-3': { lui: { kcal: 710, pro: 64 }, lei: { kcal: 560, pro: 51 } },
+    'mar-1': { lui: { kcal: 820, pro: 55 }, lei: { kcal: 620, pro: 42 } },
+    'mar-2': { lui: { kcal: 560, pro: 27 }, lei: { kcal: 380, pro: 18 } },
+    'mar-3': { lui: { kcal: 530, pro: 66 }, lei: { kcal: 540, pro: 58 } },
+    'mer-1': { lui: { kcal: 730, pro: 44 }, lei: { kcal: 590, pro: 32 } },
+    'mer-2': { lui: { kcal: 600, pro: 29 }, lei: { kcal: 450, pro: 21 } },
+    'mer-3': { lui: { kcal: 690, pro: 60 }, lei: { kcal: 480, pro: 48 } },
+    'gio-1': { lui: { kcal: 880, pro: 41 }, lei: { kcal: 600, pro: 24 } },
+    'gio-2': { lui: { kcal: 410, pro: 19 }, lei: { kcal: 300, pro: 15 } },
+    'gio-3': { lui: { kcal: 690, pro: 58 }, lei: { kcal: 560, pro: 51 } },
+    'ven-1': { lui: { kcal: 810, pro: 34 }, lei: { kcal: 520, pro: 23 } },
+    'ven-2': { lui: { kcal: 560, pro: 32 }, lei: { kcal: 520, pro: 30 } },
+    'ven-3': { lui: { kcal: 640, pro: 51 }, lei: { kcal: 500, pro: 39 } },
+    'sab-1': { lui: { kcal: 740, pro: 43 }, lei: { kcal: 600, pro: 35 } },
+    'sab-2': { lui: { kcal: 370, pro: 18 }, lei: { kcal: 250, pro: 14 } },
+    'sab-3': { lui: { kcal: 1000, pro: 55 }, lei: { kcal: 690, pro: 38 } },
+    'dom-1': { lui: { kcal: 740, pro: 42 }, lei: { kcal: 570, pro: 27 } },
+    'dom-2': { lui: { kcal: 360, pro: 16 }, lei: { kcal: 290, pro: 13 } },
+    'dom-3': { lui: { kcal: 860, pro: 64 }, lei: { kcal: 640, pro: 50 } }
+  },
 
   // ---------- DISCLAIMER CLINICO ----------
   disclaimer: '⚠️ Piano indicativo ad alto contenuto clinico. Non sostituisce endocrinologo, neurologo, parodontologo e nutrizionista clinico. Rivalutare ogni 4–6 settimane in base a esami del sangue (TSH, fT3, fT4, glicemia, lipidi).'

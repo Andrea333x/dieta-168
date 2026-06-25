@@ -377,7 +377,71 @@
     return '<div class="tbl-wrap"><table class="tbl"><thead>' + head + '</thead><tbody>' + rows + '</tbody></table></div>';
   }
 
-  function mealCardHtml(p, interactive) {
+  function currentSeason() {
+    var m = new Date().getMonth();
+    if (m >= 5 && m <= 7) return 'estate';
+    if (m === 11 || m <= 1) return 'inverno';
+    if (m >= 2 && m <= 4) return 'primavera';
+    return 'autunno';
+  }
+
+  // Stima macro del pasto per persona (da DIET_DATA.macroByMeal, chiave "<id>-<n>")
+  function mealMacro(dayId, n) {
+    var map = D.macroByMeal || {};
+    return (dayId && map[dayId + '-' + n]) || null;
+  }
+  function macroRowHtml(dayId, n) {
+    var mm = mealMacro(dayId, n);
+    if (!mm) return '';
+    var chips = attivi().map(function (per) {
+      var x = mm[per]; if (!x) return '';
+      var lbl = per === 'lui' ? '👦' : '👩';
+      return '<span class="macro-chip">' + lbl + ' ' + esc(x.kcal) + ' kcal · ' + esc(x.pro) + 'g</span>';
+    }).join('');
+    return chips ? '<div class="macro-row" aria-label="Stima calorie e proteine del pasto">' + chips + '</div>' : '';
+  }
+
+  // Target macro per il confronto giornaliero (dai range del piano)
+  var MACRO_TARGET = {
+    lui: { kcalMin: 1900, kcalMax: 2100, proMin: 130, proMax: 150, floor: null },
+    lei: { kcalMin: 1450, kcalMax: 1600, proMin: 100, proMax: 120, floor: 1400 }
+  };
+  function dayMacroTotals(dayId) {
+    var map = D.macroByMeal || {};
+    if (!dayId) return null;
+    var tot = { lui: { kcal: 0, pro: 0, has: false }, lei: { kcal: 0, pro: 0, has: false } };
+    [1, 2, 3].forEach(function (n) {
+      var mm = map[dayId + '-' + n]; if (!mm) return;
+      ['lui', 'lei'].forEach(function (per) {
+        if (mm[per]) { tot[per].kcal += +mm[per].kcal || 0; tot[per].pro += +mm[per].pro || 0; tot[per].has = true; }
+      });
+    });
+    return tot;
+  }
+  function macroStatus(per, x) {
+    var t = MACRO_TARGET[per]; if (!t || !x.has) return '';
+    if (t.floor != null && x.kcal < t.floor) return '<span class="macro-flag">⚠️ sotto il minimo di ' + t.floor + ' kcal</span>';
+    var msgs = [];
+    if (x.kcal < t.kcalMin) msgs.push('⬇️ calorie basse'); else if (x.kcal > t.kcalMax) msgs.push('⬆️ calorie alte');
+    if (x.pro < t.proMin) msgs.push('proteine sotto target');
+    return msgs.length ? '<span class="macro-flag">' + esc(msgs.join(' · ')) + '</span>' : '<span class="macro-ok">✓ nel range</span>';
+  }
+  function dayMacroCardHtml(dayId) {
+    var tot = dayMacroTotals(dayId); if (!tot) return '';
+    var rows = attivi().map(function (per) {
+      var x = tot[per]; if (!x.has) return '';
+      var t = MACRO_TARGET[per];
+      var lbl = per === 'lui' ? '👦 LUI' : '👩 LEI';
+      return '<div class="macro-day-row"><span><b>' + lbl + '</b> ' + x.kcal + ' kcal · ' + x.pro + 'g proteine ' +
+        '<small>(obiettivo ' + t.kcalMin + '–' + t.kcalMax + ' kcal · ' + t.proMin + '–' + t.proMax + 'g)</small></span> ' +
+        macroStatus(per, x) + '</div>';
+    }).join('');
+    if (!rows) return '';
+    return '<div class="card macro-day"><h2>🔢 Stima macro del giorno</h2>' + rows +
+      '<p class="sub small mt">Stime indicative dalle porzioni del piano (non pesate al grammo): una bussola, soprattutto per non scendere sotto il minimo calorico di lei.</p></div>';
+  }
+
+  function mealCardHtml(p, interactive, dayId) {
     if (!p) return '';
     var checks = interactive
       ? '<div class="checkrow">' + attivi().map(function (per) {
@@ -385,6 +449,18 @@
         }).join('') + '</div>'
       : '';
     var nota = p.nota ? '<p class="nota">' + esc(p.nota) + '</p>' : '';
+    // Mini-tab "Varianti & rotazione" (alternative + stagionalità): <details> nativo, cliccabile
+    var varianti = '';
+    if (p.varianti && p.varianti.length) {
+      var season = currentSeason();
+      var vlis = p.varianti.map(function (v) {
+        var inSeason = v.stagione && v.stagione !== 'sempre' && v.stagione === season;
+        var badge = inSeason ? ' <span class="v-now">consigliata ora</span>' : '';
+        return '<li><b>' + esc(v.emoji || '🔄') + ' ' + esc(v.nome) + '</b>' + badge +
+          (v.dettaglio ? ' — ' + esc(v.dettaglio) : '') + '</li>';
+      }).join('');
+      varianti = '<details class="mini varianti"><summary>🔄 Varianti & rotazione · ' + p.varianti.length + '</summary><ul class="dots">' + vlis + '</ul></details>';
+    }
     var prep = '';
     if (p.prep) {
       var passi = (p.prep.passi || []).map(function (s) { return '<li>' + esc(s) + '</li>'; }).join('');
@@ -407,7 +483,8 @@
     return '<article class="card meal">' +
       '<div class="meal-head"><span class="meal-emoji">' + esc(p.emoji || '🍽️') + '</span>' +
       '<div><p class="label">Pasto ' + esc(p.n) + ' · ' + esc(p.ora || '') + '</p><h3>' + esc(p.titolo || '') + '</h3></div></div>' +
-      itemsTable(p.items) + p1extra + nota + prep + checks +
+      macroRowHtml(dayId, p.n) +
+      itemsTable(p.items) + p1extra + nota + varianti + prep + checks +
       '</article>';
   }
 
@@ -436,7 +513,7 @@
     var full = weekFullDays();
 
     // pasti
-    var mealsHtml = ((g && g.pasti) || []).map(function (p) { return mealCardHtml(p, true); }).join('');
+    var mealsHtml = ((g && g.pasti) || []).map(function (p) { return mealCardHtml(p, true, g && g.id); }).join('');
 
     // integratori
     var ints = (D.integratori || []).filter(function (it) {
@@ -483,6 +560,7 @@
       '<div class="section-title"><h2>🍽️ I pasti di ' + esc((g && g.nome) || 'oggi') + '</h2>' +
       ((g && g.sottotitolo) ? '<span class="label">' + esc(g.sottotitolo) + '</span>' : '') + '</div>' +
       (mealsHtml || '<div class="card empty">Nessun pasto trovato per oggi.</div>') +
+      dayMacroCardHtml(g && g.id) +
 
       '<div class="card"><h2>💊 Integratori</h2>' +
       '<p class="sub small">' + esc(D.integratoriSoluzione || '') + '</p>' +
@@ -532,7 +610,7 @@
       return '<button type="button" class="' + cls + '" data-day="' + i + '" aria-pressed="' + (i === selDay) + '">' + esc((gg.nome || '').slice(0, 3)) + '</button>';
     }).join('');
 
-    var meals = ((g && g.pasti) || []).map(function (p) { return mealCardHtml(p, false); }).join('');
+    var meals = ((g && g.pasti) || []).map(function (p) { return mealCardHtml(p, false, g && g.id); }).join('');
 
     var gridRows = giorni.map(function (gg, i) {
       var cells = [1, 2, 3].map(function (n) {
@@ -1637,6 +1715,90 @@
     showTab('oggi');
     registerSW();
   }
+
+  // ---------------------------------------------------------
+  // FASE 6.1 — Riassunto log per l'assistente AI (contesto proattivo)
+  // Espone window.DietLogs.contextSummary(): stringa compatta dei log
+  // recenti (aderenza pasti, umore, peso, idratazione, orari, ciclo) che
+  // assistant.js appende al contesto runtime del system prompt, così il
+  // coach può dare spunti proattivi e personalizzati. Solo lettura,
+  // difensivo, nessuna nuova chiave localStorage.
+  // ---------------------------------------------------------
+  function personaNome(per) { return per === 'lui' ? 'LUI' : per === 'lei' ? 'LEI' : per; }
+
+  function lastMoodInfo(per) {
+    for (var i = 0; i < 4; i++) {
+      var d = new Date(); d.setDate(d.getDate() - i);
+      var v = moodGet(todayKey(d))[per];
+      if (v) { var mo = moodObj(v); return { l: mo ? mo.l : v, daysAgo: i }; }
+    }
+    return null;
+  }
+
+  function adherence7() {
+    var sum = 0, n = 0;
+    for (var i = 1; i <= 7; i++) {
+      var d = new Date(); d.setDate(d.getDate() - i);
+      var dk = todayKey(d);
+      var t = getState('track_' + dk, {}) || {};
+      if (!Object.keys(t).length) continue; // giorno non tracciato → non conteggiare
+      sum += dayCompletion(dk); n++;
+    }
+    return n ? Math.round((sum / n) * 100) : null;
+  }
+
+  function weightTrend(per) {
+    var arr = (weightGet()[per]) || [];
+    if (!arr.length) return null;
+    var last = arr[arr.length - 1];
+    var out = { kg: last.kg, delta: null };
+    if (arr.length >= 2) out.delta = Math.round((last.kg - arr[arr.length - 2].kg) * 10) / 10;
+    return out;
+  }
+
+  function contextSummary() {
+    try {
+      var lines = [];
+      var who = attivi();
+      var ds = daysSince(startDate());
+      var head = 'Giorno ' + (ds + 1) + ' del piano.';
+      var adh = adherence7();
+      if (adh != null) head += ' Aderenza pasti ultimi 7gg: ' + adh + '%.';
+      var streak = currentStreak();
+      if (streak > 0) head += ' Streak attuale: ' + streak + (streak === 1 ? ' giorno.' : ' giorni.');
+      lines.push(head);
+
+      var gd = (D.giorni || [])[dayIndex()];
+      var todayTot = gd ? dayMacroTotals(gd.id) : null;
+
+      who.forEach(function (per) {
+        var parts = [];
+        if (todayTot && todayTot[per] && todayTot[per].has) {
+          var tg = MACRO_TARGET[per];
+          var fl = (tg.floor != null && todayTot[per].kcal < tg.floor) ? ' ⚠️ sotto il minimo ' + tg.floor + ' kcal' : '';
+          parts.push('kcal piano oggi ~' + todayTot[per].kcal + ' / ' + todayTot[per].pro + 'g pro (obiettivo ' + tg.kcalMin + '–' + tg.kcalMax + ' kcal)' + fl);
+        }
+        var mood = lastMoodInfo(per);
+        if (mood) parts.push('umore ' + mood.l + (mood.daysAgo === 0 ? ' (oggi)' : ' (' + mood.daysAgo + 'gg fa)'));
+        var water = (waterGet()[per]) || 0;
+        var wt = WATER_TARGET[per] || 8;
+        if (water > 0) parts.push('acqua oggi ' + water + '/' + wt + ' bicchieri');
+        var wtr = weightTrend(per);
+        if (wtr) parts.push('peso ' + wtr.kg + 'kg' + (wtr.delta != null ? ' (' + (wtr.delta >= 0 ? '+' : '') + wtr.delta + 'kg dall\'ultima misura)' : ''));
+        var irreg = regularity(per).filter(function (r) { return r.status === 'bad'; }).map(function (r) { return r.l.toLowerCase(); });
+        if (irreg.length) parts.push('orari poco regolari: ' + irreg.join(', '));
+        if (parts.length) lines.push('- ' + personaNome(per) + ': ' + parts.join(' · '));
+      });
+
+      if (who.indexOf('lei') !== -1) {
+        var ci = cycleInfo();
+        if (ci) lines.push('- LEI ciclo: giorno ' + ci.day + ' (' + ci.phase + (ci.soft ? ', fase delicata' : '') + ')');
+      }
+      return lines.join('\n');
+    } catch (e) { return ''; }
+  }
+
+  window.DietLogs = { contextSummary: contextSummary };
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);

@@ -10,18 +10,23 @@ nutrizionale **Digiuno Intermittente 16:8** della coppia, con meal prep, ricette
 ## Tab dell'app
 | Tab | Contenuto |
 |---|---|
-| 📅 **Oggi** | I 3 pasti del giorno con porzioni lui/lei, reminder integratori, check-list, recap giornaliero |
+| 📅 **Oggi** | I 3 pasti del giorno con porzioni lui/lei, **stima macro/calorie** del pasto e del giorno, reminder integratori, check-list, recap giornaliero |
 | 🗓️ **Settimana** | Piano completo Lun–Dom navigabile |
 | 🍳 **Meal Prep** | Batch cooking domenica, timeline, contenitori, conservazione |
 | 🍽️ **Ricette** | Ricette dettagliate con immagine, divise per momento, con filtri |
 | 💡 **Tips** | Tips, tricks, alternative ragionate, biohacking |
 | 🛒 **Spesa** | Lista spesa settimanale anti-spreco, spuntabile, con barra di progresso e "nascondi presi" |
 | 📔 **Diario** | Storico aderenza + streak, heatmap, umore/energia, peso con grafico, regolarità orari, ciclo (lei), note per le visite — tutto solo sul dispositivo |
-| 🤖 **AI** | Assistente AI che conosce tutta la dieta (serve API key Anthropic) |
+| 🤖 **AI** | Coach AI (NVIDIA · Kimi K2.6 / GLM-5.1) che conosce tutta la dieta; **proattivo**: legge i log del Diario e dà spunti su misura |
 
 La tab **Oggi** include anche: card "Come stai oggi" (umore + idratazione), coaching della prima settimana,
-badge "ordine del piatto" e guida "come rompo il digiuno" sul Pasto 1. Le **Ricette** (43) hanno preferiti ⭐
-e filtri clinici (#pro-gengive, #anti-infiammatorio).
+badge "ordine del piatto" e guida "come rompo il digiuno" sul Pasto 1. Le **Ricette** (49) hanno preferiti ⭐
+e filtri clinici (#pro-gengive, #anti-infiammatorio). Dal piano v1.4.0: insalata di mare, seitan/tempeh con
+verdure, pollo con verdure, smoothie di frutta consentita e bowl fredda con avocado.
+
+Dal **v1.5.0**: ogni pasto ha la **stima macro/calorie** (con card riepilogo del giorno e alert se LEI scende sotto
+il minimo calorico), un **mini-tab "🔄 Varianti & rotazione"** con alternative e rotazione stagionale, e lo **sgombro
+del venerdì** (omega-3) accanto all'insalata di mare del martedì.
 
 ## Installazione su iPhone (hosting protetto)
 L'app contiene dati sanitari personali: è pubblicata **solo con accesso protetto**.
